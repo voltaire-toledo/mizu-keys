@@ -1,0 +1,302 @@
+#Requires AutoHotkey v2.0
+
+/*
+╔══════════════════════════════════════╗
+║ Mouse-related macros and automation  ║
+╚══════════════════════════════════════╝
+*/
+
+
+#HotIf (Aux_HotKeySupport = true)
+{
+  /*
+  ╭───────────────────────────────────────────╮
+  │      Higher Function Keys (F13-F24)       │
+  ├───────────────────────────────────────────┤
+  │                                           │
+  │ F13:   [GShift]+[Lt_Click]                │
+  │ F14:   [Num4] OR [GShift]+[Lt_Scroll]     │ 
+  │ F15:   [Num5] OR [GShift]+[Md_Click]      │     
+  │ F16:   [Num6] OR [GShift]+[Rt_Scroll]     │ 
+  │ F17:   [Num8] OR [Btn_Up]                 │ [Num7] OR [GShift]+[Btn_Next] -- Swap with ↓ 
+  │ F18:   [Num7] OR [GShift]+[Btn_Up]        │ [Num8] OR [Btn_Up]            -- Swap with ↑
+  │ F19:   [Num9] OR [Btn_Down]               │ 
+  │ F20:   [Num0] OR [GShift]+[Btn_Down]      │ [Num0] OR [GShift]+[Lt_Click] -- Swap with ↓
+  │ F21:   [Num1] OR [GShift]+[Btn_Fwd]       │ [Num1] OR [GShift]+[Btn_Back] -- Swap with ↑
+  │ F22:   [Num2] OR [GShift]+[OnBoard_Cycle] │ 
+  │ F23:   [Num3] OR [GShift]+[Rt_Click]      │ 
+  │ F24: [NumDot] OR [GShift]+[Btn_Back]      │
+  │                                           │
+  ╰───────────────────────────────────────────╯*/
+
+  ; Notion-specific hotkeys
+  #HotIf WinActive("ahk_exe Notion.exe")
+  appInUse := "Notion"
+  F13:: Click
+  F14:: ModalMsg "No Action Assigned", appInUse, 5
+  F15:: ModalMsg "No Action Assigned", appInUse, 5
+  F16:: ModalMsg "No Action Assigned", appInUse, 5
+  F17:: ModalMsg "No Action Assigned", appInUse, 5
+  F18:: ModalMsg "No Action Assigned", appInUse, 5
+  F19:: ModalMsg "No Action Assigned", appInUse, 5
+  F20:: ModalMsg "No Action Assigned", appInUse, 5   ; /block equation
+  F21:: ModalMsg "No Action Assigned", appInUse, 5   ; /blockequation
+  F22:: ModalMsg "No Action Assigned", appInUse, 5   ; /turntoggleheading2
+  #HotIf
+
+  ; MS Word-specific hotkeys
+  #HotIf WinActive("ahk_exe WINWORD.exe")
+  appInUse := "MS Word"
+  F13:: Click
+  F14:: ModalMsg "No Action Assigned", appInUse, 5
+  F15:: ModalMsg "No Action Assigned", appInUse, 5
+  F16:: ModalMsg "No Action Assigned", appInUse, 5
+  F17:: ModalMsg "No Action Assigned", appInUse, 5
+  F18:: ModalMsg "No Action Assigned", appInUse, 5
+  F19:: ModalMsg "No Action Assigned", appInUse, 5
+  F20:: ModalMsg "No Action Assigned", appInUse, 5   ; /block equation
+  F21:: ModalMsg "No Action Assigned", appInUse, 5   ; /blockequation
+  F22:: ModalMsg "No Action Assigned", appInUse, 5   ; /turntoggleheading2
+  F23:: ModalMsg "No Action Assigned", appInUse, 5   ; /turntoggleheading1
+  #HotIf
+
+  ; GMail-specific hotkeys
+  #HotIf WinActive(" - Gmail and ")
+  appInUse := "GMail"
+  F13:: Click
+  F14:: Send "k"
+  F15:: ModalMsg "No Action Assigned", appInUse, 5
+  F16:: Send "j"
+  F17:: ModalMsg "No Action Assigned", appInUse, 5
+  F18:: ModalMsg "No Action Assigned", appInUse, 5
+  F19:: ModalMsg "No Action Assigned", appInUse, 5
+  F20:: ModalMsg "No Action Assigned", appInUse, 5
+  F21:: ModalMsg "No Action Assigned", appInUse, 5
+  F22:: ModalMsg "No Action Assigned", appInUse, 5
+  F23:: Send "{#}"   ; Delete the current email
+  #HotIf
+
+  ; ╭─────────────────────╮
+  ; │  VS Code: CODE.EXE  │
+  ; ╰─────────────────────╯
+  #HotIf WinActive("ahk_exe Code.exe")
+  F13:: Click
+  F14:: Send "^["
+  F15:: ModalMsg "No Action Assigned", "VS Code", 5
+  F16:: Send "^]"
+  F17:: ModalMsg "No Action Assigned", "VS Code", 5
+  F18:: ModalMsg "No Action Assigned", "VS Code", 5
+  F19:: ModalMsg "No Action Assigned", "VS Code", 5
+  F20:: ModalMsg "No Action Assigned", "VS Code", 5
+  F21:: ModalMsg "No Action Assigned", "VS Code", 5
+  F22:: ModalMsg "No Action Assigned", "VS Code", 5
+  F23:: ModalMsg "No Action Assigned", "VS Code", 5
+  ; ^WheelRight:: Send "^{]}"             ; Speed up the playback
+  ; ^WheelLeft:: Send "^{[}"              ; Slow down the playback
+  #HotIf
+
+  /*
+  ╭─────────────────────────────────────────────────────────────────╮
+  │  [▶️] YouTube (Broswer): Browser Window title " - YouTube and "  │
+  │  ⚡ These TetraClicks only apply in the playback page, NOT the   │
+  │       YouTube home/search/browse pages, which uses the Tetra-   │
+  │       -Clicks for the browser (or default).                     │
+  ╰─────────────────────────────────────────────────────────────────╯ */
+
+  #HotIf WinActive(" - YouTube and ")
+  F13:: Click
+  ^F14:: Send "{<}"                     ; Switch to the previous tab
+  F15:: ModalMsg "No Action Assigned", "YouTube", 5
+  ^F16:: Send "{>}"                    ; Switch to the previous tab
+  F18:: ModalMsg "No Action Assigned", "YouTube", 5
+  F17:: Send "{>}"                     ; Speed up the playback
+  F19:: Send "{<}"                     ; Slow down the playback
+  F21:: ModalMsg "No Action Assigned", "YouTube", 5
+  F20:: ModalMsg "No Action Assigned", "YouTube", 5
+  F22:: ModalMsg "No Action Assigned", "YouTube", 5
+  F23:: Send "^{w}"                    ; Close the current tab
+  ^WheelUp:: Send "{Volume_Up 1}"      ; Increase the volume
+  ^WheelDown:: Send "{Volume_Down 1}"  ; Decrease the volume
+  WheelRight:: Send "{l}"              ; Fast forward 10s
+  WheelLeft:: Send "{j}"               ; Rewind 10s
+  +WheelRight:: Send "^{Right}"        ; Seek to next chapter
+  +WheelLeft:: Send "^{Left}"          ; Seek to previous chapter
+  #HotIf
+
+  /*
+  ╭────────────────────────────────────╮
+  │  Microsoft "New" Outlook: OLK.EXE  │
+  ╰────────────────────────────────────╯ */
+  #HotIf WinActive("ahk_exe olk.exe")
+  F13:: Send "^q"                                       ; Mark as Read
+  F14:: {
+    if WinActive("Calendar -") {
+      Send "!{Up}"                                    ; If in Calendar view - Previous week 
+    } else {
+      Send "^,"                                       ; If in Mail view - Previous Message
+    }
+  }
+  F15:: ModalMsg "No Action Assigned", "NEW Outlook", 5
+  F16:: {
+    if WinActive("Calendar -") {
+      Send "!{Down}"                                  ; If in Calendar view - Next week
+    } else {
+      Send "^."                                       ; If in Mail view - Next Message
+    }
+  }
+  F18:: Send "^t"                                       ; Post a reply                 
+  F17:: Send "^{1}"                                     ; Switch to Mail view
+  F19:: Send "^{2}"                                     ; Switch to Calendar view
+  F21:: ModalMsg "No Action Assigned", "NEW Outlook", 5
+  F20:: Send "^U"                                       ; Mark as Unread
+  F22:: ModalMsg "No Action Assigned", "NEW Outlook", 5
+  F23:: Send "{Del}"                                    ; Delete Current Email
+  F24:: ModalMsg "No Action Assigned", "NEW Outlook", 5
+  #HotIf
+
+  /*
+  ╭────────────────────────────────────────────╮
+  │  Microsoft "Classic" Outlook: OUTLOOK.EXE  │
+  ╰────────────────────────────────────────────╯ */
+  ; Create an appointment: Ctrl+Shift+A
+  ; Go to Mail: Ctrl+1
+  ; Delete: Del
+  ; Undo: Ctrl+Z
+
+  ; Previous Message: Ctrl+,
+  ; Next Message: Ctrl+.
+
+  #HotIf WinActive("ahk_exe OUTLOOK.exe")
+  F13:: Send "^q"                                       ; Mark as Read
+  F14:: {
+    if WinActive("Calendar -") {
+      Send "!{Up}"                                    ; If in Calendar view - Previous week 
+    } else {
+      Send "^,"                                       ; If in Mail view - Previous Message
+    }
+  }
+  F15:: ModalMsg "No Action Assigned", "NEW Outlook", 5
+  F16:: {
+    if WinActive("Calendar -") {
+      Send "!{Down}"                                  ; If in Calendar view - Next week
+    } else {
+      Send "^."                                       ; If in Mail view - Next Message
+    }
+  }
+  F18:: Send "^+r"                                      ; Post a reply to all
+  F17:: Send "^{1}"                                     ; Switch to Mail view
+  F19:: Send "^{2}"                                     ; Switch to Calendar view
+  F21:: ModalMsg "No Action Assigned", "NEW Outlook", 5
+  F20:: Send "^U"                                       ; Mark as Unread
+  F22:: ModalMsg "No Action Assigned", "NEW Outlook", 5
+  F23:: Send "{Del}"                                    ; Delete Current Email
+  F24:: ModalMsg "No Action Assigned", "NEW Outlook", 5
+  #HotIf
+
+  /*
+  ╭────────────────────────────────────╮
+  │  Microsoft Excel: EXCEL.EXE        │
+  ╰────────────────────────────────────╯ */
+  #HotIf WinActive("ahk_exe EXCEL.exe")
+  F13:: ModalMsg "No Action Assigned", "EXCEL.EXE", 5
+  F14:: Send "^{PgUp}"                                 ; Previous Worksheet
+  F15:: ModalMsg "No Action Assigned", "EXCEL.EXE", 5
+  F16:: Send "^{PgDn}"                                 ; Next Worksheet
+  F18:: {
+          Send "^!{v}"                                 ; Paste the clipboard's format only
+          Send "{t}"
+          Send "{Enter}"
+        }
+    F17:: Send "^+{v}"                                    ; Paste as plain textt
+  F19:: Send "^{c}"                                     ; Copy
+  F20:: ModalMsg "No Action Assigned", "EXCEL.EXE", 5
+  F21:: ModalMsg "No Action Assigned", "EXCEL.EXE", 5
+  F22:: ModalMsg "No Action Assigned", "EXCEL.EXE", 5
+  F23:: ModalMsg "No Action Assigned", "EXCEL.EXE", 5
+  F24:: ModalMsg "No Action Assigned", "EXCEL.EXE", 5
+  NumpadSub:: Send "^{y}"                               ; Redo
+  NumpadAdd:: Send "^{z}"                               ; Undo
+  #HotIf
+
+  /*
+  ╭────────────────────────────────────╮
+  │  Microsoft Teams: MS-TEAMS.EXE     │
+  ╰────────────────────────────────────╯ */
+  #HotIf WinActive("ahk_exe ms-teams.exe")
+  F13:: ModalMsg "No Action Assigned", "MS-TEAMS.EXE", 5
+  F14:: Send "^{PgUp}"                                 ; Previous Worksheet
+  F15:: ModalMsg "No Action Assigned", "MS-TEAMS.EXE", 5
+  F16:: Send "^{PgDn}"                                 ; Next Worksheet
+  F18:: {
+          Send "^!{v}"                                 ; Paste the clipboard's format only
+          Send "{t}"
+          Send "{Enter}"
+        }
+  F17:: Send "^{2}"                                     ; Chat View
+  F19:: Send "^{4}"                                     ; Calendar View
+  F20:: Send "^{3}"                                     ; Teams View
+  F21:: ModalMsg "No Action Assigned", "MS-TEAMS.EXE", 5
+  F22:: ModalMsg "No Action Assigned", "MS-TEAMS.EXE", 5
+  F23:: ModalMsg "No Action Assigned", "MS-TEAMS.EXE", 5
+  F24:: ModalMsg "No Action Assigned", "MS-TEAMS.EXE", 5
+  NumpadSub:: Send "^{y}"                               ; Redo
+  NumpadAdd:: Send "^{z}"                               ; Undo
+  #HotIf
+
+  /*
+  ╭──────────────────────────────╮
+  │  Microsoft Edge: MSEDGE.EXE  │
+  ╰──────────────────────────────╯ */
+  #HotIf WinActive("ahk_exe msedge.exe")
+  F13:: Send "^+{v}"                                    ; Ctrl+Shift+V to Paste as plain text
+  F14:: Send "^+{Tab}"                                  ; Ctrl+Shift+Tab to switch to the previous tab
+  F15:: {                                               ; Ctrl+Shift+U to Read Out Loud
+    SplashGUI("MS Edge: Read Out Loud...", 2000)
+    Send "^+{u}"
+  }
+  F16:: Send "^{Tab}"                                   ; Ctrl+Tab to switch to the next tab
+  F18:: ModalMsg "No Action Assigned", "Edge", 5
+  F17:: Send "{Home}"                                   ; "{Home}" to go to the top of the page
+  F19:: Send "{End}"                                    ; "{End}" to go to the bottom of the page
+  F20:: ModalMsg "No Action Assigned", "Edge", 5
+  F21:: ModalMsg "No Action Assigned", "Edge", 5
+  F22:: ModalMsg "No Action Assigned", "Edge", 5
+  F23:: Send "^{w}"                                     ; Ctrl+W to close the current tab
+
+  #HotIf
+
+  /*
+  ╭════════════════════════════════════════════════╮
+  │ EVERYTHING ELSE: Default Mouse Button Hotkeys  │
+  ╰════════════════════════════════════════════════╯ */
+  F13:: Click
+  F14:: Send "^+{Tab}"                                          ; Ctrl+Shift+Tab to switch to the previous tab
+  F15:: ModalMsg "No Action Assigned", "General", 5
+  F16:: Send "^{Tab}"                                           ; Ctrl+Tab to switch to the next tab
+  F17:: Send "#{Tab}"                                           ; Win+Tab to view all open windows
+  F18:: ModalMsg "No Action Assigned", "General", 5
+  F19:: ModalMsg "No Action Assigned", "General", 5
+  F20:: ModalMsg "No Action Assigned", "General", 5
+  F21:: ModalMsg "No Action Assigned", "General", 5
+  F22:: ModalMsg "No Action Assigned", "General", 5
+  F23:: Send "^{w}"
+  F24:: ModalMsg "No Action Assigned", "General", 5
+
+  +F19:: ModalMsg "No Definition Assigned", "Default", 5
+}
+#HotIf
+
+; ╭──────────────────────────────────────────────────────╮
+; │  FUNCTION: Wrapper for MsgBox for undefined HotClix  │
+; ╰──────────────────────────────────────────────────────╯
+ModalMsg(message_string, app_in_use, timeout_in_seconds)
+{
+  ; MsgBox app_in_use
+  theMsg := "App: `t" . app_in_use . "`nHotClix: `t" . A_ThisHotkey . "`n`n" . "[" . message_string . "]"
+  theIcon := 64 ; ℹ️ icon
+  theModality := 262144 ; Modal
+  theTimeout := "T" . timeout_in_seconds
+  theOptions := Format("{1} {2}", theTimeout, (theIcon + theModality))
+
+  MsgBox theMsg, A_ScriptName, theOptions
+}

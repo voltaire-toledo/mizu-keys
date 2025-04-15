@@ -1,0 +1,98 @@
+#Requires AutoHotkey v2.0
+
+/*
+┌─────────────────────────────────────────────┐
+│  Auxillary hotkeys for common actions;      │
+│  customize the conditions to your liking.   │
+└─────────────────────────────────────────────┘
+*/
+
+#HotIf (Aux_HotKeySupport = true)
+{
+  ; ┌──────────────────────────────────────┐
+  ; │ [LShift]+[RShift]+[n] to run Notepad │
+  ; └──────────────────────────────────────┘
+  RShift & n::
+  {
+    ; [LShift]+[RShift]+[n] to run an elevated Notepad process
+    If GetKeyState("LShift", "P") && GetKeyState("RShift", "P") && GetKeyState("Ctrl", "P")
+    {
+      Run "notepad"
+      exit ; return will only exit the current condition
+    }
+
+    If GetKeyState("LShift", "P") && GetKeyState("RShift", "P")
+    {
+      If WinExist("ahk_class Notepad")
+      {
+        WinActivate
+        WinShow
+        Return
+      }
+      Else
+      {
+        Run "notepad.exe"
+        ; WinActivate
+        Return
+      }
+    }
+    Else
+    {
+      Send "N" ; This is to respond to [RShift}+[N]; otherwise, nothing will be sent
+    }
+  }
+
+  /*╭────────────────────────────────────╮
+    │  [Win]]+[Shift]+[n] to run Notion  │
+    ╰────────────────────────────────────╯*/
+  ^#!n:: {
+    ; Path to Notion.exe
+    static notionIconPath := RegRead("HKCU\Software\Microsoft\Windows\CurrentVersion\Uninstall\661f0cc6-343a-59cb-a5e8-8f6324cc6998", "DisplayIcon")
+    static notionPath := SubStr(notionIconPath, 1, InStr(notionIconPath, ",") - 1)
+    If WinExist("ahk_exe Notion.exe")
+    {
+      WinActivate
+      SoundPlay sound_file_start
+      WinShow
+      Return
+    }
+    Else
+    {
+      If FileExist(notionPath)
+      {
+        Run notionPath
+        ; SoundPlay "*48"
+        Return
+      }
+      Else
+      {
+        SoundPlay sound_file_stop
+        Return
+      }
+    }
+  }
+
+
+  /*╭───────────────────────────────────────────────────────────────────────────────╮
+    │  Directional keys to scroll the active window. Useful for TKL keyboards       │
+    │  like laptops and those that use Fn key combinations for [PgUp], [PgDn],      │
+    │  [Home], and [End].                                                           │
+    │                                                                               │
+    │  Directional keys to scroll the active window. Useful for TKL keyboards       │
+    │  like laptops and those that use Fn key combinations for [PgUp], [PgDn],      │
+    │  [Home], and [End].                                                           │
+    │                                                                               │
+    │  To use, simply lay your left thumb on the right Control key and use the      │
+    │  arrow keys.                                                                  │
+    │                                                                               │
+    │  +-------------------------------------------------------------------------+  │
+    │  | ⚡ The {Blind^} prevents misinterpretation by ignoring the Ctrl modifier │  │
+    │  +-------------------------------------------------------------------------+  │
+    ╰───────────────────────────────────────────────────────────────────────────────╯*/
+  ~RCtrl & Up:: Send "{Blind>^}{PgUp}"
+  ~RCtrl & Down:: Send "{Blind>^}{PgDn}"
+  ~RCtrl & Left:: Send "{Blind>^}{Home}"
+  ~RCtrl & Right:: Send "{Blind>^}{End}"
+  ~RCtrl & Backspace:: Send "{Blind>^}{Del}"
+}
+#HotIf

@@ -1,0 +1,30 @@
+#Requires AutoHotkey v2.0
+
+/*╭─────────────────────────────────────────────────────────╮
+  │  [CapsLock] modes & chords                              │
+  │  Hit the [CapsLock]+[?] To enter the MODE, then         │
+  │  follow it with another key to complete the CHORD.      │
+  ├─────────────────────────────────────────────────────────┤
+  │  MODES:                                                 │
+  │  [b] BROWSE WEB     Qwik access to fav sites            │
+  │  [o] OPEN APP       Qwik access to apps                 │
+  │  [p] POWERTOYS      Shortcuts to PowerToys utils        │
+  │  [c] CLIP UTILs     Qwik utils on the selected text     │
+  │  [u] UTILITIES      Qwik access to utilities            │
+  ├─────────────────────────────────────────────────────────┤
+  │  [CapsLock]+[O], [b]   OPEN APP: Bitwarden              │
+  │  [CapsLock]+[O], [c]   OPEN APP: ✓ VS Code              │
+  │  [CapsLock]+[O], [d]   OPEN APP: Dev Tools              │
+  │  [CapsLock]+[O], [h]   OPEN APP: Dev Home               │
+  │  [CapsLock]+[O], [n]   OPEN APP: ✓ Notepad              │
+  │  [CapsLock]+[O], [p]   OPEN APP: ✓ Epic Pen             │
+  │  [CapsLock]+[O], [w]   OPEN APP: Terminal (WSL)         │
+  │                                                         │
+  │  [CapsLock]+[b], [c]   BROWSE: chat.openai.com          │
+  │  [CapsLock]+[b], [d]   BROWSE: dev.azure.com            │
+  │  [CapsLock]+[b], [g]   BROWSE: github.com               │
+  │  [CapsLock]+[b], [i]   BROWSE: icons8.com               │
+  │  [CapsLock]+[b], [p]   BROWSE: portal.azure.com         │
+  │  [CapsLock]+[b], [y]   BROWSE: youtube.com              │
+  │                                                         │
+  ╰─────────────────────────────────────────────────────────╯*/
