@@ -41,10 +41,6 @@ global regkey_sticky_keys := "HKEY_CURRENT_USER\Control Panel\Accessibility\Stic
 
 DisplayTrayMenu()
 
-
-; ===================> TESTING ONLY <===================
-; DisplayShorcutKeys("FLOW Shortcut Keys Reference", "1", Tray, 10)
-; ===================> TESTING ONLY <===================
 DisplayShorcutKeys(ItemName, ItemPos, Tray, Popup_Seconds := 0)
 {
   /*
@@ -268,45 +264,6 @@ LaunchNotion(*) {
   LaunchCalculator()
 }
 
-
-; ┌───────────────────────────────────────┐
-; │ [LShift]+[RShift]+[t] to run Terminal │
-; └───────────────────────────────────────┘
-; RShift & t::
-; {
-;     ; [LShift]+[RShift]+[t] to run an elevated Terminal process
-;     If GetKeyState("LShift", "P") && GetKeyState("RShift", "P") && GetKeyState("Ctrl", "P")
-;     {
-;         ; MsgBox "Run wt.exe as Admin"
-;         Run "*RunAs wt.exe -w 0 new-tab --title Terminal(Admin) --suppressApplicationTitle"
-;         exit ; return will only exit the current condition
-;     }
-
-;     If GetKeyState("LShift", "P") && GetKeyState("RShift", "P")
-;     {
-;         If WinExist("ahk_exe WindowsTerminal.exe")
-;         {
-;             WinActivate
-;             WinShow
-;             Return
-;         }
-;         Else
-;         {
-;             Run "wt.exe -w 0 new-tab --title Terminal --suppressApplicationTitle", , , &wt_pid
-;             Sleep 1000
-;             If WinExist("ahk_exe WindowsTerminal.exe") or WinExist("ahk_title Terminal")
-;                 {
-;                     WinActivate
-;                     WinShow
-;                 }
-;             Return
-;         }
-;     }
-;     Else
-;     {
-;         Send "T" ; This is to respond to [RShift}+[T]; otherwise, nothing will be sent
-;     }
-; }
 
 ;╭───────────────────────────────────────────────────────╮
 ;│  [Ctrl]+[Alt]+[T] for Terminal                        │

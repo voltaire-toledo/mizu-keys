@@ -3,6 +3,9 @@
 **/.scratch/*
 **/.snippets/*
 
+# Ignore the AutoHotkey binaries; to be installed manually or via Mizu
+**/ahkbin*/*
+
 # Ignore custom directory icon
 desktop.ini
 
