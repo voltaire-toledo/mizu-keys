@@ -1,0 +1,5 @@
+MyGui := Gui()
+MyGui.Add("Progress", "w200 h20 cBlue vMyProgress", 75)
+MyGui.Show()
+Sleep(1000)
+MyGui.Hide()
