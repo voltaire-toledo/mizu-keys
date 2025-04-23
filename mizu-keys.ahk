@@ -43,19 +43,6 @@ DisplayTrayMenu()
 
 DisplayShorcutKeys(ItemName, ItemPos, Tray, Popup_Seconds := 0)
 {
-  /*
-  MsgBox "You selected " ItemName " (position " ItemPos ")"
-  HelpMessage := "
-      (
-      [CTRL]+[ALT]+[WIN]+[R]::`t reload this script`n
-      [CTRL]+[ALT]+[Win]+[E]::`tedit this script`n
-      [CTRL]+[Win]+[B]::`tinsert a bullet point`n
-      [LShift]+[RShift]+[T]::`trun Terminal`n
-      [LShift]+[RShift]+[CTRL]+[T]::`trun Terminal as Admin`n
-      [LShift]+[RShift]+[N]::`trun Notepad `n
-      )"
-  MsgBox HelpMessage, "FLOW Shortcut Keys", "Iconi 4096"
-  */
   img_alt_key := ".\media\icons\alt_key.ico"
   img_ctrl_key := ".\media\icons\ctrl_key.ico"
   img_lshift_key := ".\media\icons\shiftl_key.png"

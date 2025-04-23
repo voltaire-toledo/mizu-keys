@@ -12,10 +12,10 @@ traymenu_icon_checked       := ".\media\icons\checked.ico"
 traymenu_icon_unchecked     := ".\media\icons\unchecked.ico"
 
 ; custom tray menu items
-trayitem_flow_ref             := "Tetrakeys Shortcut Keys"
-trayitem_flow_ref_ico         := ".\media\icons\sl-normal.ico"
-trayitem_flow_ref_ico         := ".\media\icons\keeb.ico"
-trayitem_about                := "About FLOW Streamline"
+trayitem_app_ref              := "Tetrakeys Shortcut Keys"
+trayitem_app_ref_ico          := ".\media\icons\sl-normal.ico"
+trayitem_app_ref_ico          := ".\media\icons\keeb.ico"
+trayitem_about                := "About Mizu Keys"
 trayitem_about_ico            := tray_icon_normal
 trayitem_reload               := "&Reload Script`t[Ctrl+Win+Alt]+[R]"
 trayitem_reload_ico           := ".\media\icons\reload.ico"
@@ -27,7 +27,7 @@ trayitem_debug                := "Debug Tools"
 trayitem_debug_ico            := ".\media\icons\debug.ico"
 trayitem_ahkhelp              := "AutoHotkey Help`t[Ctrl+Win+Alt]+[F2]"
 trayitem_ahkhelp_ico          := ".\media\icons\help.ico"
-trayitem_exit                 := "E&xit FLOW Streamline"
+trayitem_exit                 := "E&xit Mizu Keys"
 trayitem_exit_ico             := ".\media\icons\stop.ico"
 trayitem_edit                 := "E&dit Script`t[Ctrl+Win+Alt]+[E]"
 trayitem_edit_ico             := ".\media\icons\edit.ico"
@@ -69,7 +69,7 @@ DisplayTrayMenu()
   global Tray := A_TrayMenu ; For convenience.
   IconTipString := "
     (
-      FLOW Shortcut Keys
+      Mizu Keys Shortcuts
       Last Run: `s
     )" LaunchTime "
     (
@@ -81,8 +81,8 @@ DisplayTrayMenu()
   Tray.Delete()
 
   ; Define the menu items
-  Tray.Add(trayitem_flow_ref, DisplayShorcutKeys)
-  Tray.SetIcon(trayitem_flow_ref, trayitem_flow_ref_ico)
+  Tray.Add(trayitem_app_ref, DisplayShorcutKeys)
+  Tray.SetIcon(trayitem_app_ref, trayitem_app_ref_ico)
 
   Tray.Add(trayitem_reload, ReloadAndReturn)
   Tray.SetIcon(trayitem_reload, trayitem_reload_ico)
@@ -142,7 +142,7 @@ DisplayTrayMenu()
 
 
   ; Set the default menu item for double-clicking the tray icon
-  Tray.Default := trayitem_flow_ref
+  Tray.Default := trayitem_app_ref
 
   ; Make the tray menu when the tray icon is also left-clicked
   OnMessage 0x404, Received_AHK_NOTIFYICON
