@@ -19,7 +19,7 @@ Constructor()
 	Tab.UseTab()
 	ButtonOK.OnEvent("Click", OnEventHandler)
 	myGui.OnEvent('Close', (*) => ExitApp())
-	myGui.Title := "Tetrakey v1.0.0_beta (Clone)"
+	myGui.Title := "Mizu Keys v1.0.0_beta (Clone)"
 	
 	OnEventHandler(*)
 	{

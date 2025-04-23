@@ -96,13 +96,12 @@
   #HotIf
 
   /*
-  ╭─────────────────────────────────────────────────────────────────╮
-  │  [▶️] YouTube (Broswer): Browser Window title " - YouTube and "  │
-  │  ⚡ These TetraClicks only apply in the playback page, NOT the   │
-  │       YouTube home/search/browse pages, which uses the Tetra-   │
-  │       -Clicks for the browser (or default).                     │
-  ╰─────────────────────────────────────────────────────────────────╯ */
-
+  ╭──────────────────────────────────────────────────────────────────────╮
+  │  YouTube (Broswer): Browser Window title [ - YouTube and ]           │
+  │  ⚡ These functions only apply in the playback page, NOT the YouTube  │
+  │    home/search/browse pages, which uses the Mizu Clicks for the      │
+  │    browser (or default).                                             │
+  ╰──────────────────────────────────────────────────────────────────────╯ */
   #HotIf WinActive(" - YouTube and ")
   F13:: Click
   ^F14:: Send "{<}"                     ; Switch to the previous tab
