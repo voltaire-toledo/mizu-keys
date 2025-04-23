@@ -1,4 +1,4 @@
-﻿#Requires Autohotkey v2
+#Requires Autohotkey v2
 
 if A_LineFile = A_ScriptFullPath && !A_IsCompiled
 {
