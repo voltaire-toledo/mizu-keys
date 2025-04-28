@@ -27,9 +27,9 @@ winget install autohotkey
 ```
 
 ### Step 2: Download and run Mizu-Keys for Windows 
-Download the [Mizu-Keys for Windows](https://github.com/volatile-torpedo/Mizu-Keys) release and extract the contents to a folder of your choice. The following command will install the latest release to a folder named `hhhs-main` in your `%APPDATA%` folder, which will typically be `C:\Users\<username>\AppData\Roaming\hhhs-main`
+Download the [Mizu-Keys for Windows](https://github.com/voltaire-toledo/mizu-keys) release and extract the contents to a folder of your choice. The following command will install the latest release to a folder named `Mizu-Keys-main` in your `%APPDATA%` folder, which will typically be `C:\Users\<username>\AppData\Roaming\Mizu-Keys-main`
 ```powershell
-Invoke-WebRequest 'https://github.com/volatile-torpedo/Mizu-Keys/archive/refs/heads/main.zip' -OutFile .\Mizu-Keys.zip; Expand-Archive .\Mizu-Keys.zip -DestinationFolder $env:APPDATA -Force; Remove-Item .\Mizu-Keys.zip; cd $env:APPDATA\Mizu-Keys-main; Start-Process .\Mizu-Keys.ahk
+Invoke-WebRequest 'https://github.com/voltaire-toledo/mizu-keys/archive/refs/heads/main.zip' -OutFile .\Mizu-Keys.zip; Expand-Archive .\Mizu-Keys.zip -DestinationFolder $env:APPDATA -Force; Remove-Item .\Mizu-Keys.zip; cd $env:APPDATA\Mizu-Keys-main; Start-Process .\Mizu-Keys.ahk
 ```
 
 ### Optional Step 3: Run Mizu Keys for Windows at startup
