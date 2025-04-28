@@ -1,3 +1,15 @@
+<#
+.SYNOPSIS
+    Script to create a Start Menu shortcut for Mizu Keys and ensure AutoHotkey is downloaded and configured.
+
+.DESCRIPTION
+    This script downloads AutoHotkey, creates a Start Menu folder, and generates a shortcut to launch Mizu Keys.
+    It includes error handling and modularized functions for better maintainability.
+
+.NOTES
+    Compatible with PowerShell 5.1 and later.
+#>
+
 #region Configuration
 $ShortcutName = "Mizu Keys.lnk"
 $ShortcutDisplayName = "Mizu Keys"
@@ -56,38 +68,45 @@ function Get-AutoHotkey {
 # | Creates a shortcut to a target file or folder.  │
 # ╰─────────────────────────────────────────────────╯
 function New-Shortcut {
-    param(
-        [string] $ShortcutPath,
-        [string] $TargetPath,
-        [string] $Arguments,
-        [string] $Description,
-        [string] $WorkingDirectory,
-        [string] $IconPath,
-        [string] $ShortcutDisplayName
-    )
+  param(
+      [string] $ShortcutPath,
+      [string] $TargetPath,
+      [string] $Arguments,
+      [string] $Description,
+      [string] $WorkingDirectory,
+      [string] $IconPath,
+      [string] $ShortcutDisplayName
+  )
 
-    if (Test-Path $ShortcutPath) {
+  try {
+      if (Test-Path $ShortcutPath) {
         Write-Warning "Shortcut '$ShortcutDisplayName' already exists at '$ShortcutPath'. Overwriting."
-    }
+      }
+      $Shell = New-Object -ComObject WScript.Shell
+      $Shortcut = $Shell.CreateShortcut($ShortcutPath)
+      $Shortcut.TargetPath = $TargetPath
+      $Shortcut.Arguments = $Arguments
+      $Shortcut.Description = $Description
+      $Shortcut.WorkingDirectory = $WorkingDirectory
+      $Shortcut.IconLocation = $IconPath
+      $Shortcut.Save()
 
-    $Shell = New-Object -ComObject WScript.Shell
-    $Shortcut = $Shell.CreateShortcut($ShortcutPath)
-    $Shortcut.TargetPath = $TargetPath
-    $Shortcut.Arguments = $Arguments
-    $Shortcut.Description = $Description
-    $Shortcut.WorkingDirectory = $WorkingDirectory
-    $Shortcut.IconLocation = $IconPath
-    $Shortcut.Save()
+      # Rename the shortcut display name
+      $objShell = New-Object -ComObject Shell.Application
+      $objFolder = $objShell.Namespace((Split-Path -Path $ShortcutPath -Parent))
+      $objItem = $objFolder.ParseName((Split-Path -Path $ShortcutPath -Leaf))
+      $objItem.Name = $ShortcutDisplayName
 
-    #Rename
-    $objShell = New-Object -ComObject Shell.Application
-    $objFolder = $objShell.Namespace((Split-Path -Path $ShortcutPath -Parent))
-    $objItem = $objFolder.ParseName((Split-Path -Path $ShortcutPath -Leaf))
-    $objItem.Name = $ShortcutDisplayName
+      [System.Runtime.InteropServices.Marshal]::ReleaseComObject($Shell)
+      [System.Runtime.InteropServices.Marshal]::ReleaseComObject($objShell)
+      Remove-Variable -Name Shell, objShell
+  } catch {
+      Write-Error "Failed to create shortcut: $($_.Exception.Message)"
+      return $false
+  }
 
-    [System.Runtime.InteropServices.Marshal]::ReleaseComObject($Shell)
-    [System.Runtime.InteropServices.Marshal]::ReleaseComObject($objShell)
-    Remove-Variable -Name Shell, objShell
+  Write-Output "Shortcut created at '$ShortcutPath'."
+  return $true
 }
 #endregion
 
@@ -99,28 +118,37 @@ function New-Shortcut {
 $StartMenuPath = [Environment]::GetFolderPath("StartMenu")
 $StartMenuFolderPath = Join-Path -Path (Join-Path -Path $StartMenuPath -ChildPath "Programs") -ChildPath $StartMenuFolderName
 
-# Check for AutoHotkey and download if not found.
+# Ensure AutoHotkey is downloaded and extracted.
 if (!(Test-Path -Path $AHKBinPath)) {
     if (!(Get-AutoHotkey)) {
-        exit # Stop if AHK download/extraction fails
+        Write-Error "Failed to set up AutoHotkey. Exiting script."
+        exit 1
     }
 }
 
-# Create the Start Menu folder if it does not exist.
+# Ensure the Start Menu folder exists.
 if (!(Ensure-Directory -Path $StartMenuFolderPath)) {
-    $StartMenuFolderPath = $StartMenuPath # Use the root if creating the folder fails
+    Write-Warning "Failed to create Start Menu folder. Using Start Menu root instead."
+    $StartMenuFolderPath = $StartMenuPath
 }
 
-$ShortcutPath = Join-Path -Path $StartMenuFolderPath -ChildPath "$ShortcutName"
+# Define the shortcut path and target.
+$ShortcutPath = Join-Path -Path $StartMenuFolderPath -ChildPath $ShortcutName
 $TargetPath = Join-Path -Path $AHKBinPath -ChildPath $AHKExecutableName
 
-# Create the shortcut
+# Create the shortcut.
 $WorkingDirectory = Split-Path -Path $PSScriptRoot -Parent
-New-Shortcut -ShortcutPath $ShortcutPath -TargetPath $TargetPath -Arguments $Arguments -Description $Description -WorkingDirectory $PSScriptRoot -IconPath $IconPath -ShortcutDisplayName $ShortcutDisplayName -Force
-write-host "Shortcut created at $ShortcutPath"
+if (!(New-Shortcut -ShortcutPath $ShortcutPath -TargetPath $TargetPath -Arguments $Arguments -Description $Description -WorkingDirectory $PSScriptRoot -IconPath $IconPath -ShortcutDisplayName $ShortcutDisplayName)) {
+    Write-Error "Failed to create the shortcut. Exiting script."
+    exit 1
+}
 
 # Start the shortcut without waiting for it to finish.
-Start-Process -FilePath $ShortcutPath
-
-Write-Output "Shortcut '$ShortcutDisplayName' created and started."
+try {
+    Start-Process -FilePath $ShortcutPath
+    Write-Output "Shortcut '$ShortcutDisplayName' created and started."
+} catch {
+    Write-Error "Failed to start the shortcut: $($_.Exception.Message)"
+    exit 1
+}
 #endregion
