@@ -12,10 +12,10 @@ traymenu_icon_checked       := ".\media\icons\checked.ico"
 traymenu_icon_unchecked     := ".\media\icons\unchecked.ico"
 
 ; custom tray menu items
-trayitem_flow_ref             := "Mizu Keys"
-trayitem_flow_ref_ico         := ".\media\icons\sl-normal.ico"
-trayitem_flow_ref_ico         := ".\media\icons\keeb.ico"
-trayitem_about                := "About FLOW Streamline"
+trayitem_app_ref             := "Mizu Keys"
+trayitem_app_ref_ico         := ".\media\icons\sl-normal.ico"
+trayitem_app_ref_ico         := ".\media\icons\keeb.ico"
+trayitem_about                := "About Mizu Keys"
 trayitem_about_ico            := tray_icon_normal
 trayitem_reload               := "&Reload Script`t[Ctrl+Win+Alt]+[R]"
 trayitem_reload_ico           := ".\media\icons\reload.ico"
@@ -225,18 +225,18 @@ ToggleRunAtStartup(*)
 ; ╭──────────────────────────────────────────────────────────────────────╮
 ; │  Update the Tray Menu UI to indicate if a feature is enabled or not  │
 ; ╰──────────────────────────────────────────────────────────────────────╯
-IndicateToggle(FLOWFeatureName, FLOWFeature, IsEnabled := false, DisplayChange := false, PlaySound := false)
+IndicateToggle(AppFeatureName, AppFeature, IsEnabled := false, DisplayChange := false, PlaySound := false)
 {
-  ; FLOWFeatureName is a string that indicates the FLOW feature being toggled
+  ; AppFeatureName is a string that indicates the FLOW feature being toggled
 
-  ; FLOWFeature is an Evaluated string that indicates the FLOW feature being toggled
+  ; AppFeature is an Evaluated string that indicates the FLOW feature being toggled
   ; Acceptable values (based on variable names): "hotkeys", "hotstrings", "all"
 
   ; IsEnabled is a boolean that indicates whether the FLOW feature is enabled or disabled
   if (Aux_HotStringSupport = false) and (Aux_HotKeySupport = false) {
     ; Both features are off
-    FLOWFeature := "all"
-    TraySetIcon tray_icon_pause_%FLOWFeature% ; Set the normal icon
+    AppFeature := "all"
+    TraySetIcon tray_icon_pause_%AppFeature% ; Set the normal icon
   }
 
   ; PlaySound parameter is a boolean that indicates whether to play a sound when toggling
@@ -253,16 +253,16 @@ IndicateToggle(FLOWFeatureName, FLOWFeature, IsEnabled := false, DisplayChange :
   ; DisplayChange parameter is a boolean that indicates whether to display a message when toggling
   if (DisplayChange = true) {
     if (IsEnabled = true) {
-      gui_message := FLOWFeatureName " Enabled"
+      gui_message := AppFeatureName " Enabled"
       gui_theme := "Success"
       TraySetIcon tray_icon_normal
     } else {
-      gui_message := FLOWFeatureName " Disabled"
+      gui_message := AppFeatureName " Disabled"
       gui_theme := "Warning"
-      TraySetIcon tray_icon_pause_%FLOWFeature%
+      TraySetIcon tray_icon_pause_%AppFeature%
     }
 
-    WiseGui(FLOWFeature
+    WiseGui(AppFeature
       , "Theme:       " gui_theme
       , "MainText:    " gui_message
       , "Transparency: 192"
@@ -273,19 +273,6 @@ IndicateToggle(FLOWFeatureName, FLOWFeature, IsEnabled := false, DisplayChange :
     )
   }
 }
-
-; ╭───────────────────────╮
-; │  Suspend all hotkeys  │
-; ╰───────────────────────╯
-; SuspendHotkeys(*)
-; {
-;   Suspend -1 ; toggle suspend
-
-;   if A_IsSuspended = true
-;     TraySetIcon ".\FLOW\FLOW_tray_dark_pause.ico"
-;   else
-;     Tray.Default := "TestDefault"
-; }
 
 /*
 ╭────────────────╮
