@@ -32,10 +32,10 @@ LaunchTime := FormatTime()
 global process_theme := ""
 global app_ico := ".\media\icons\mizu-leaf.ico"
 global toggle_sound_file_startrun := A_Windir "\Media\Windows Unlock.wav"
-global toggle_sound_file_enabled := ".\media\audio\01_enable.wav"
-global toggle_sound_file_disabled := ".\media\audio\01_disable.wav"
-global sound_file_start := ".\media\audio\start-13691.wav"
-global sound_file_stop := ".\media\audio\stop-13692.wav"
+global toggle_sound_file_enabled := ".\media\sounds\01_enable.wav"
+global toggle_sound_file_disabled := ".\media\sounds\01_disable.wav"
+global sound_file_start := ".\media\sounds\start-13691.wav"
+global sound_file_stop := ".\media\sounds\stop-13692.wav"
 global regkey_sticky_keys := "HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys"
 
 
