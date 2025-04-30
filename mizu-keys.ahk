@@ -1,28 +1,17 @@
 #Requires AutoHotkey v2.0
 
-; Ensure single mutex. Use [Prompt] switch to prompt for options
+/*
+╭──────────────────────────────────────────────────────────────╮
+│ Mizu Keys - AutoHotkey Script                                │
+│ Automations leveraging AutoHotkey for enhanced productivity  │
+╰──────────────────────────────────────────────────────────────╯
+*/
+
 #SingleInstance Force
-
-; Use default Windows response to built-in responses to keyboard shortcutsm, e.g. [Alt]+[<-]
-SendMode "Input"
-
-; Default matching behavior for searches using WinTitle, e.g. WinWait
-SetTitleMatchMode 2
+SendMode "Input"    ; Use default Windows response to built-in responses to keyboard shortcutsm, e.g. [Alt]+[<-]
+SetTitleMatchMode 2 ; Default matching behavior for searches using WinTitle, e.g. WinWait
 InstallKeybdHook
 ; InstallMouseHook
-
-; Include the following libraries
-#Include ".\lib\_about.ahk"
-#Include ".\lib\_traymenu.mzk"
-#Include ".\lib\_hotkeys.mzk"
-#Include ".\lib\_hotstrings.mzk"
-#Include ".\lib\_alerts.mzk"
-#Include ".\lib\_mizuclick.mzk"
-#include ".\lib\_modes.mzk"
-#Include ".\lib\WiseGui.ahk"
-
-; Get Launch/Reload Time
-LaunchTime := FormatTime()
 
 /*
 ╭────────────────────────╮
@@ -38,14 +27,36 @@ global sound_file_start := ".\media\sounds\start-13691.wav"
 global sound_file_stop := ".\media\sounds\stop-13692.wav"
 global regkey_sticky_keys := "HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys"
 
+/*
+╭────────────────────────╮
+│ LIBRARY INCLUDES       │
+╰────────────────────────╯
+*/
+#Include ".\lib\_about.ahk"
+#Include ".\lib\_traymenu.mzk"
+#Include ".\lib\_hotkeys.mzk"
+#Include ".\lib\_hotstrings.mzk"
+#Include ".\lib\_alerts.mzk"
+#Include ".\lib\_mizuclick.mzk"
+#include ".\lib\_modes.mzk"
+#Include ".\lib\WiseGui.ahk"
 
+/*
+╭────────────────────────╮
+│ INITIALIZATION         │
+╰────────────────────────╯
+*/
+LaunchTime := FormatTime()
 DisplayTrayMenu()
 
-
+/*
+╭────────────────────────╮
+│ FUNCTIONS              │
+╰────────────────────────╯
+*/
 ReloadAndReturn(*)
 {
   Reload
-  Return
 }
 
 EditAndReturn(*)
@@ -59,7 +70,11 @@ EndScript(*)
   ExitApp
 }
 
-
+/*
+╭────────────────────────╮
+│ HOTKEY DEFINITIONS     │
+╰────────────────────────╯
+*/
 LaunchCalculator(*)
 {
   ; Single Instance condition. Do not create a new process and used the last one created
