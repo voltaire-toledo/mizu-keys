@@ -2,6 +2,8 @@
 # Ignore all files in the scratch and snippets foldres
 **/.scratch/*
 **/.snippets/*
+**/.playground/*
+
 
 # Ignore the AutoHotkey binaries; to be installed manually or via Mizu
 **/ahkbin*/*
