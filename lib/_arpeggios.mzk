@@ -1,0 +1,142 @@
+#Requires AutoHotkey v2.0
+
+/*╭─────────────────────────────────────────────────────────╮
+  │  [CapsLock] ARPEGGIOS                                   │
+  │  Hit the [CapsLock]+[?] To enter the MODE, then         │
+  │  follow it with another key to complete the ARPEGGIO.   │
+  ├─────────────────────────────────────────────────────────┤
+  │  MODES:                                                 │
+  │  [B] BROWSE WEB     Qwik access to fav sites            │
+  │  [O] OPEN APP       Open Application Mode               │
+  │  [P] POWERTOYS      Shortcuts to PowerToys utils        │
+  │  [C] CLIP UTILs     Qwik utils on the selected text     │
+  │  [U] UTILITIES      Qwik access to utilities            │
+  ╰─────────────────────────────────────────────────────────╯*/
+; ╭─────────────────────────────────╮
+; │  Helper Function: KeyWaitAny()  │
+; ╰─────────────────────────────────╯
+KeyWaitAny(*)
+{
+  ; This function waits for a key to be pressed and returns the key name.
+  ; It uses an InputHook to capture the keypress WITHIN a specific time frame (4 seconds).
+  ; The key name is returned as a string.
+  ih := InputHook("B L1 T4 M", "abcdefghijklmnopqrstuvwxyz12345678900")
+  ih.KeyOpt("{All}", "E")  ; End
+  ih.Start()
+  ih.Wait()
+  
+  return ih.EndKey  ; Return the key name
+}
+
+; ╭────────────────────────────────────────────────╮
+; │  Helper Function: SplashGUI(Message, TimeOut)  │
+; ╰────────────────────────────────────────────────╯
+SplashGUI(message, timeout) {
+  WiseGui("MizuKeySplash"
+  , "Margins:       3,3,0,4"
+  ; , "Theme:,,," . LoadPicture(A_AhkPath, "Icon1", &ImageType)
+  , "Theme:,,,"  LoadPicture(app_ico, "Icon1", &ImageType)
+  , "FontMain:     S14, Arial"
+  , "MainText:     " message
+  ; , "FontSub:      S14, Consolas"
+  ; , "SubText:" . A_AhkVersion
+  , "SubAlign:     +1"
+  ; , "Show:         Fade@400ms"
+  , "Hide:         Fade@1000ms"
+  , "Timer:        2000"
+  )
+}
+
+; ╭──────────────────────────────────────────╮
+; │  [CapsLock]+[o]. OPEN APPLICTATION Mode  │
+; ├──────────────────────────────────────────┤
+; │  [C] ✓ Visual Studio Code                |
+; │  [E] ✓ Epic Pen                          │
+; │  [N] ✓ Notion                            │
+; |  [O] ✓ Outlook                           │
+; |  [P] ✓ PowerPoint                        │
+; |  [W] ✓ Word                              │
+; |  [X] ✓ Excel                             │
+; ├──────────────────────────────────────────┤
+; │  [b] Bitwarden                           │
+; │  [d] Dev Tools              │
+; │  [h] Dev Home               │
+; │  [w] Terminal (WSL)         │
+; ╰──────────────────────────────────────────╯
+CapsLock & o::
+{
+  KeyWait "CapsLock"
+  
+  AppModeOptionsString := (
+    "[C] VS Code`n"
+    "[E] Epic Pen`n"
+    "[N] Notion`n"
+    "[O] Outlook`n"
+    "[P] PowerPoint`n"
+    "[W] Word`n"
+    "[X] Excel"
+  )
+  ; Display the options for the user
+  WiseGui("AppModeOptions"
+  , "Margins:       3,3,0,4"
+  , "Theme:,,,"  LoadPicture(app_ico, "Icon1", &ImageType)
+  , "FontMain:     S12 Bold, Arial"
+  , "MainText:     Press a key to start an app:"
+  , "MainAlign:    +1"
+  , "FontSub:      S12, Cascadia Mono"
+  , "SubText:    " AppModeOptionsString
+  , "SubAlign:     -1"
+  , "Timer:        3500"
+  )
+
+  retKeyHook := KeyWaitAny()
+  ; WiseGui("AppModeOptions") ; Kill the splash screen
+
+  If (retKeyHook = "c") {
+      SplashGUI("Starting VS Code...", 2000)
+      Run "code.cmd"
+  }
+  Else If (retKeyHook = "e") {
+    SplashGUI("Starting Epic Pen...", 2000)
+    Run EnvGet("ProgramFiles(x86)") "\Epic Pen\EpicPen.exe"
+  }
+  Else If (retKeyHook = "n") {
+    SplashGUI("Starting Notion...", 2000)
+    LaunchNotion()
+  }
+  Else If (retKeyHook = "o") {
+    SplashGUI("Starting MS Outlook...", 2000)
+    Send "^!+#o"
+  }
+  Else If (retKeyHook = "p") {
+    SplashGUI("Starting MS PowerPoint...", 2000)
+    Send "^!+#p"
+  }
+  Else If (retKeyHook = "w") {
+      SplashGUI("Starting MS Word...", 2000)
+      Send "^!+#w"
+  }
+  Else If (retKeyHook = "x") {
+    SplashGUI("Starting MS Excel...", 2000)
+    Send "^!+#x"
+  }
+  Else {
+    ;Send "O" ; This is to respond to [LShift}+[o]; otherwise, nothing will be sent
+  }
+}
+
+; ╭──────────────────────────────────────────╮
+; │  [CapsLock]+[B]. OPEN Web Sites          │
+; ├──────────────────────────────────────────┤
+; │  [c] chat.openai.com                     |
+; │  [d] dev.azure.com                       │
+; │  [g] github.com                          │
+; |  [i] icons8.com                          │
+; |  [p] portal.azure.com                    │
+; |  [y] youtube.com                         │
+; ├──────────────────────────────────────────┤
+; │  [b]                                     │
+; │  [d]                                     │
+; │  [h]                                     │
+; │  [w]                                     │
+; ╰──────────────────────────────────────────╯
