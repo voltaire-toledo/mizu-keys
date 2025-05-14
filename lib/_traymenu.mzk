@@ -12,10 +12,10 @@ traymenu_icon_checked       := ".\media\icons\checked.ico"
 traymenu_icon_unchecked     := ".\media\icons\unchecked.ico"
 
 ; custom tray menu items
-trayitem_flow_ref             := "Tetrakeys Shortcut Keys"
-trayitem_flow_ref_ico         := ".\media\icons\sl-normal.ico"
-trayitem_flow_ref_ico         := ".\media\icons\keeb.ico"
-trayitem_about                := "About FLOW Streamline"
+trayitem_app_ref             := "Mizu Keys"
+trayitem_app_ref_ico         := ".\media\icons\sl-normal.ico"
+trayitem_app_ref_ico         := ".\media\icons\keeb.ico"
+trayitem_about                := "About Mizu Keys"
 trayitem_about_ico            := tray_icon_normal
 trayitem_reload               := "&Reload Script`t[Ctrl+Win+Alt]+[R]"
 trayitem_reload_ico           := ".\media\icons\reload.ico"
@@ -27,7 +27,7 @@ trayitem_debug                := "Debug Tools"
 trayitem_debug_ico            := ".\media\icons\debug.ico"
 trayitem_ahkhelp              := "AutoHotkey Help`t[Ctrl+Win+Alt]+[F2]"
 trayitem_ahkhelp_ico          := ".\media\icons\help.ico"
-trayitem_exit                 := "E&xit FLOW Streamline"
+trayitem_exit                 := "E&xit Mizu Keys"
 trayitem_exit_ico             := ".\media\icons\stop.ico"
 trayitem_edit                 := "E&dit Script`t[Ctrl+Win+Alt]+[E]"
 trayitem_edit_ico             := ".\media\icons\edit.ico"
@@ -69,7 +69,7 @@ DisplayTrayMenu()
   global Tray := A_TrayMenu ; For convenience.
   IconTipString := "
     (
-      FLOW Shortcut Keys
+      Mizu Keys Shortcuts
       Last Run: `s
     )" LaunchTime "
     (
@@ -81,8 +81,8 @@ DisplayTrayMenu()
   Tray.Delete()
 
   ; Define the menu items
-  Tray.Add(trayitem_flow_ref, DisplayShorcutKeys)
-  Tray.SetIcon(trayitem_flow_ref, trayitem_flow_ref_ico)
+  Tray.Add(trayitem_app_ref, DisplayShorcutKeys)
+  Tray.SetIcon(trayitem_app_ref, trayitem_app_ref_ico)
 
   Tray.Add(trayitem_reload, ReloadAndReturn)
   Tray.SetIcon(trayitem_reload, trayitem_reload_ico)
@@ -113,8 +113,7 @@ DisplayTrayMenu()
   DebugMenu.Add("Key & Mouse Button History", ShowListLines)
   DebugMenu.Add("Coming: KeyHistory", ShowListLines)
   DebugMenu.Disable("Coming: KeyHistory")
-  DebugMenu.Add("List Hotkeys", ListSimpleHotkeys)
-  ; DebugMenu.Disable("Coming: ListHotKeys")
+  ; DebugMenu.Add("List Hotkeys", ListSimpleHotkeys)
   DebugMenu.Add("Coming: ListVars", ShowListLines)
   DebugMenu.Disable("Coming: ListVars")
   DebugMenu.Add("Coming: WindowsSpy", ShowListLines)
@@ -142,7 +141,7 @@ DisplayTrayMenu()
 
 
   ; Set the default menu item for double-clicking the tray icon
-  Tray.Default := trayitem_flow_ref
+  Tray.Default := trayitem_app_ref
 
   ; Make the tray menu when the tray icon is also left-clicked
   OnMessage 0x404, Received_AHK_NOTIFYICON
@@ -225,18 +224,18 @@ ToggleRunAtStartup(*)
 ; ╭──────────────────────────────────────────────────────────────────────╮
 ; │  Update the Tray Menu UI to indicate if a feature is enabled or not  │
 ; ╰──────────────────────────────────────────────────────────────────────╯
-IndicateToggle(FLOWFeatureName, FLOWFeature, IsEnabled := false, DisplayChange := false, PlaySound := false)
+IndicateToggle(AppFeatureName, AppFeature, IsEnabled := false, DisplayChange := false, PlaySound := false)
 {
-  ; FLOWFeatureName is a string that indicates the FLOW feature being toggled
+  ; AppFeatureName is a string that indicates the FLOW feature being toggled
 
-  ; FLOWFeature is an Evaluated string that indicates the FLOW feature being toggled
+  ; AppFeature is an Evaluated string that indicates the FLOW feature being toggled
   ; Acceptable values (based on variable names): "hotkeys", "hotstrings", "all"
 
   ; IsEnabled is a boolean that indicates whether the FLOW feature is enabled or disabled
   if (Aux_HotStringSupport = false) and (Aux_HotKeySupport = false) {
     ; Both features are off
-    FLOWFeature := "all"
-    TraySetIcon tray_icon_pause_%FLOWFeature% ; Set the normal icon
+    AppFeature := "all"
+    TraySetIcon tray_icon_pause_%AppFeature% ; Set the normal icon
   }
 
   ; PlaySound parameter is a boolean that indicates whether to play a sound when toggling
@@ -253,16 +252,16 @@ IndicateToggle(FLOWFeatureName, FLOWFeature, IsEnabled := false, DisplayChange :
   ; DisplayChange parameter is a boolean that indicates whether to display a message when toggling
   if (DisplayChange = true) {
     if (IsEnabled = true) {
-      gui_message := FLOWFeatureName " Enabled"
+      gui_message := AppFeatureName " Enabled"
       gui_theme := "Success"
       TraySetIcon tray_icon_normal
     } else {
-      gui_message := FLOWFeatureName " Disabled"
+      gui_message := AppFeatureName " Disabled"
       gui_theme := "Warning"
-      TraySetIcon tray_icon_pause_%FLOWFeature%
+      TraySetIcon tray_icon_pause_%AppFeature%
     }
 
-    WiseGui(FLOWFeature
+    WiseGui(AppFeature
       , "Theme:       " gui_theme
       , "MainText:    " gui_message
       , "Transparency: 192"
@@ -273,19 +272,6 @@ IndicateToggle(FLOWFeatureName, FLOWFeature, IsEnabled := false, DisplayChange :
     )
   }
 }
-
-; ╭───────────────────────╮
-; │  Suspend all hotkeys  │
-; ╰───────────────────────╯
-; SuspendHotkeys(*)
-; {
-;   Suspend -1 ; toggle suspend
-
-;   if A_IsSuspended = true
-;     TraySetIcon ".\FLOW\FLOW_tray_dark_pause.ico"
-;   else
-;     Tray.Default := "TestDefault"
-; }
 
 /*
 ╭────────────────╮
@@ -356,4 +342,118 @@ ShowHelp(*)
   ; Run A_ProgramFiles "\AutoHotkey\v2\AutoHotkey.chm"
 
   Return
+}
+
+/*
+╭────────────────────╮
+│ DisplayShortcuts() │
+╰────────────────────╯ */
+DisplayShorcutKeys(ItemName, ItemPos, Tray, Popup_Seconds := 0)
+{
+  /*
+  MsgBox "You selected " ItemName " (position " ItemPos ")"
+  HelpMessage := "
+      (
+      [CTRL]+[ALT]+[WIN]+[R]::`t reload this script`n
+      [CTRL]+[ALT]+[Win]+[E]::`tedit this script`n
+      [CTRL]+[Win]+[B]::`tinsert a bullet point`n
+      [LShift]+[RShift]+[T]::`trun Terminal`n
+      [LShift]+[RShift]+[CTRL]+[T]::`trun Terminal as Admin`n
+      [LShift]+[RShift]+[N]::`trun Notepad `n
+      )"
+  MsgBox HelpMessage, "FLOW Shortcut Keys", "Iconi 4096"
+  */
+  img_alt_key := ".\media\icons\alt_key.ico"
+  img_ctrl_key := ".\media\icons\ctrl_key.ico"
+  img_lshift_key := ".\media\icons\shiftl_key.png"
+  img_rshift_key := ".\media\icons\shiftr_key.png"
+  img_b_key := ".\media\icons\b_key.ico"
+  img_e_key := ".\media\icons\e_key.ico"
+  img_n_key := ".\media\icons\n_key.ico"
+  img_r_key := ".\media\icons\r_key.ico"
+  img_t_Key := ".\media\icons\t_key.ico"
+  img_win_key := ".\media\icons\win_key.ico"
+
+  SKey_Ref_UI := Gui("+MinSize600x400", "FLOW - Core Shortcut Keys")
+  SKey_Ref_UI.Opt("+AlwaysOnTop -SysMenu +Theme +MinSize600x400")  ; +Owner avoids a taskbar button.
+  ; SKey_Ref_UI.Opt("+AlwaysOnTop +Disabled -SysMenu +Owner")  ; +Owner avoids a taskbar button.
+
+  ; Column 1 - Descriptions
+  SKey_Ref_UI.SetFont("s13 q0 norm", "Calibri")
+  SKey_Ref_UI.Add("Text", "Section w180", "Reload this script")
+  SKey_Ref_UI.Add("Text", "w180", "Edit this script")
+  SKey_Ref_UI.Add("Text", "w180", "Toggle Non-Core HotKeys")
+  SKey_Ref_UI.Add("Text", "w180", "Toggle Non-Core HotStrings")
+  SKey_Ref_UI.Add("Text", "w180", "Run Terminal")
+  SKey_Ref_UI.Add("Text", "w180", "Run Terminal as Admin")
+  SKey_Ref_UI.Add("Text", "w180", "Run Notepad")
+
+  ; Column 2 - Hotkeys
+  SKey_Ref_UI.SetFont("s10 q0 norm", "Cascadia Mono")
+
+  ; New Column. Reload this script => [CTRL]+[ALT]+[WIN]+[R]
+  SKey_Ref_UI.Add("Picture", "ys Section h28 w-1 ", img_ctrl_key) ; x+4 to start at 4,0 after the last control
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_win_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_alt_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_r_key)
+
+  ; Edit this script => [CTRL]+[ALT]+[WIN]+[E]
+  SKey_Ref_UI.Add("Picture", "xs h28 w-1 ", img_ctrl_key) ; xs to start at 0,0 in the next row
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_win_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_alt_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_e_key)
+
+  ; Toggle Non-Core HotKeys => [CTRL]+[ALT]+[WIN]+[K]
+  SKey_Ref_UI.Add("Picture", "xs h28 w-1 ", img_ctrl_key) ; xs to start at 0,0 in the next row
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_win_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_alt_key)
+  ; SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_e_key)
+
+  ; Toggle Non-Core HotStrings => [CTRL]+[ALT]+[WIN]+[S]
+  SKey_Ref_UI.Add("Picture", "xs h28 w-1 ", img_ctrl_key) ; xs to start at 0,0 in the next row
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_win_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_alt_key)
+  ; SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_e_key)
+
+  ; Insert a bullet point
+  SKey_Ref_UI.Add("Picture", "xs h28 w-1 ", img_ctrl_key) ; xs to start at 0,0 in the next row
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_win_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_b_key)
+
+  ; Run Terminal => [LShift]+[RShift]+[T]
+  SKey_Ref_UI.Add("Picture", "xs h28 w-1 ", img_lshift_key) ; xs to start at 0,0 in the next row
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_rshift_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_t_key)
+
+  ; Run Terminal in Elevated window => [LShift]+[RShift]+[CTRL]+[T]
+  SKey_Ref_UI.Add("Picture", "xs h28 w-1 ", img_lshift_key) ; xs to start at 0,0 in the next row
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_rshift_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_ctrl_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_t_key)
+
+  ; Run Notepad => [LShift]+[RShift]+[N]
+  SKey_Ref_UI.Add("Picture", "xs h28 w-1 ", img_lshift_key) ; xs to start at 0,0 in the next row
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_rshift_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_n_key)
+
+  ; CLOSE Button
+  ; SKey_Ref_UI.Add("Text",, "")
+
+  SKey_Ref_UI.SetFont("s10 q0 norm", "Calibri")
+  SKey_Ref_UI.Add("Button", "Section xm w100 x150", "Close").OnEvent("Click", About_Close)
+
+  ; Show window in the center of the main screen
+  SKey_Ref_UI.Show("Center")
+
+  If (Popup_Seconds > 0)
+  {
+    Sleep Popup_Seconds * 1000
+    SKey_Ref_UI.Destroy()
+  }
+
+  About_Close(*)
+  {
+    SKey_Ref_UI.Opt("-Disabled")  ; Re-enable the main window (must be done prior to the next step).
+    SKey_Ref_UI.Destroy()  ; Destroy the about box.
+  }
 }
