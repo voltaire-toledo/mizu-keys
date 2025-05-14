@@ -6,11 +6,11 @@
   │  follow it with another key to complete the ARPEGGIO.   │
   ├─────────────────────────────────────────────────────────┤
   │  MODES:                                                 │
-  │  [B] BROWSE WEB     Qwik access to fav sites            │
+  │  [B] BROWSE WEB     Open your favorite sites            │
   │  [O] OPEN APP       Open Application Mode               │
   │  [P] POWERTOYS      Shortcuts to PowerToys utils        │
-  │  [C] CLIP UTILs     Qwik utils on the selected text     │
-  │  [U] UTILITIES      Qwik access to utilities            │
+  │  [C] CLIP UTILs     Cliboard Utilities                  │
+  │  [U] UTILITIES      Utilities                           │
   ╰─────────────────────────────────────────────────────────╯*/
 ; ╭─────────────────────────────────╮
 ; │  Helper Function: KeyWaitAny()  │
@@ -20,12 +20,26 @@ KeyWaitAny(*)
   ; This function waits for a key to be pressed and returns the key name.
   ; It uses an InputHook to capture the keypress WITHIN a specific time frame (4 seconds).
   ; The key name is returned as a string.
-  ih := InputHook("B L1 T4 M", "abcdefghijklmnopqrstuvwxyz12345678900")
-  ih.KeyOpt("{All}", "E")  ; End
+  ih := InputHook("L1 T4 M")
+  ; ih.KeyOpt("{All}", "E")  ; End
   ih.Start()
   ih.Wait()
   
-  return ih.EndKey  ; Return the key name
+  ; if (ih.EndReason = "Max")
+  ;       msg := 'You entered "{1}", which is the maximum length of text. (Endkey: {2})'
+  ;   else if (ih.EndReason = "Timeout")
+  ;       msg := 'You entered "{1}" at which time the input timed out.'
+  ;   else if (ih.EndReason = "EndKey")
+  ;       msg := 'You entered "{1}" and terminated the input with {2}.'
+
+  ;   if msg  ; If an EndReason was found, skip the rest below.
+  ;   {
+  ;       MsgBox Format(msg, ih.Input, ih.EndKey)
+  ;       return
+  ;   }
+  ; return ih.EndKey  ; Return the key name
+
+  return ih.Input  ; Return the input string
 }
 
 ; ╭────────────────────────────────────────────────╮
@@ -55,24 +69,27 @@ SplashGUI(message, timeout) {
 ; │  [N] ✓ Notion                            │
 ; |  [O] ✓ Outlook                           │
 ; |  [P] ✓ PowerPoint                        │
+; |  [T] ✓ Windows Terminal                  │
+; |  [!] ✓ Windows Terminal (ADMIN)          │
 ; |  [W] ✓ Word                              │
 ; |  [X] ✓ Excel                             │
 ; ├──────────────────────────────────────────┤
+; │  TODO: Possible Candidates               │
 ; │  [b] Bitwarden                           │
-; │  [d] Dev Tools              │
-; │  [h] Dev Home               │
-; │  [w] Terminal (WSL)         │
+; │  [w] Terminal (WSL)                      │
 ; ╰──────────────────────────────────────────╯
 CapsLock & o::
 {
   KeyWait "CapsLock"
   
   AppModeOptionsString := (
+    "[!] Windows Terminal (Admin)`n"
     "[C] VS Code`n"
     "[E] Epic Pen`n"
     "[N] Notion`n"
     "[O] Outlook`n"
     "[P] PowerPoint`n"
+    "[T] Windows Terminal`n"
     "[W] Word`n"
     "[X] Excel"
   )
@@ -120,10 +137,91 @@ CapsLock & o::
     SplashGUI("Starting MS Excel...", 2000)
     Send "^!+#x"
   }
+  Else If (retKeyHook = "t") {
+    SplashGUI("Starting Terminal...", 2000)
+    LaunchTerminal()
+  }
+  Else If (retKeyHook = "!") {
+    SplashGUI("Starting Terminal (Privileged)...", 2000)
+    Run "*RunAs wt.exe -w 0 new-tab --title Terminal(Admin) --suppressApplicationTitle"
+  }
   Else {
+    MsgBox("Invalid key pressed: " retKeyHook)
     ;Send "O" ; This is to respond to [LShift}+[o]; otherwise, nothing will be sent
   }
 }
+
+; ╭──────────────────────────────────────────╮
+; │  [CapsLock]+[C]. Clipboard Utilities          │
+; ├──────────────────────────────────────────┤
+; │  [c] Open selected into Google                     |
+; │  [d] Open selected into ChatGPT                       │
+; │  [g] Open selected into NotebookLM                          │
+; |  [i] Open selected into Google AI Studio                          │
+; |  [p] portal.azure.com                    │
+; |  [y] youtube.com                         │
+; ├──────────────────────────────────────────┤
+; │  [?] Perplexity                          │
+; │  [?] mail.google.com                     │
+; │  [?]                                     │
+; │  [?]                                     │
+; ╰──────────────────────────────────────────╯
+;================================================================================================
+; Hot keys with CapsLock modifier. See https://autohotkey.com/docs/Hotkeys.htm#combo
+;================================================================================================
+; Get DEFINITION of selected word.
+; CapsLock & d:: {
+;   ClipboardGet()
+;   Run, http: // www.google.com / search ? q = define + %clipboard% ; Launch with contents of clipboard
+;     ClipboardRestore()
+;     Return
+;       }
+
+;   ; GOOGLE the selected text.
+;   CapsLock & g:: {
+;     ClipboardGet()
+;     Run, http: // www.google.com / search ? q = %clipboard% ; Launch with contents of clipboard
+;       ClipboardRestore()
+;       Return
+;         }
+
+;     ; Do THESAURUS of selected word
+;     CapsLock & t:: {
+;       ClipboardGet()
+;       Run http: // www.thesaurus.com / browse / %Clipboard% ; Launch with contents of clipboard
+;       ClipboardRestore()
+;       Return
+;     }
+
+;     ; Do WIKIPEDIA of selected word
+;     CapsLock & w:: {
+;       ClipboardGet()
+;       Run, https: // en.wikipedia.org / wiki / %clipboard% ; Launch with contents of clipboard
+;       ClipboardRestore()
+;       Return
+;     }
+
+
+;     ClipboardGet()
+;     {
+;       OldClipboard := ClipboardAll ;Save existing clipboard.
+;       Clipboard := ""
+;       Send, ^ c ;Copy selected test to clipboard
+;       ClipWait 0
+;       If ErrorLevel
+;       {
+;         MsgBox, No Text Selected !
+;           Return
+;       }
+;     }
+
+;     ClipboardRestore()
+;     {
+;       Clipboard := OldClipboard
+;     }
+
+
+
 
 ; ╭──────────────────────────────────────────╮
 ; │  [CapsLock]+[B]. OPEN Web Sites          │
@@ -135,8 +233,9 @@ CapsLock & o::
 ; |  [p] portal.azure.com                    │
 ; |  [y] youtube.com                         │
 ; ├──────────────────────────────────────────┤
-; │  [b]                                     │
-; │  [d]                                     │
-; │  [h]                                     │
-; │  [w]                                     │
+; │  [?] Perplexity                          │
+; │  [?] mail.google.com                     │
+; │  [?]                                     │
+; │  [?]                                     │
 ; ╰──────────────────────────────────────────╯
+

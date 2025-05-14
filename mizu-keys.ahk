@@ -73,11 +73,6 @@ EndScript(*)
   ExitApp
 }
 
-/*
-╭────────────────────────╮
-│ HOTKEY DEFINITIONS     │
-╰────────────────────────╯
-*/
 
 /*
 ╭───────────────────────────────────────────────────────────────╮
@@ -99,69 +94,19 @@ EndScript(*)
 ;   return
 ; }
 
-;================================================================================================
-; Hot keys with CapsLock modifier. See https://autohotkey.com/docs/Hotkeys.htm#combo
-;================================================================================================
-; Get DEFINITION of selected word.
-; CapsLock & d:: {
-;   ClipboardGet()
-;   Run, http: // www.google.com / search ? q = define + %clipboard% ; Launch with contents of clipboard
-;     ClipboardRestore()
-;     Return
-;       }
 
-;   ; GOOGLE the selected text.
-;   CapsLock & g:: {
-;     ClipboardGet()
-;     Run, http: // www.google.com / search ? q = %clipboard% ; Launch with contents of clipboard
-;       ClipboardRestore()
-;       Return
-;         }
-
-;     ; Do THESAURUS of selected word
-;     CapsLock & t:: {
-;       ClipboardGet()
-;       Run http: // www.thesaurus.com / browse / %Clipboard% ; Launch with contents of clipboard
-;       ClipboardRestore()
-;       Return
-;     }
-
-;     ; Do WIKIPEDIA of selected word
-;     CapsLock & w:: {
-;       ClipboardGet()
-;       Run, https: // en.wikipedia.org / wiki / %clipboard% ; Launch with contents of clipboard
-;       ClipboardRestore()
-;       Return
-;     }
-
-
-;     ClipboardGet()
-;     {
-;       OldClipboard := ClipboardAll ;Save existing clipboard.
-;       Clipboard := ""
-;       Send, ^ c ;Copy selected test to clipboard
-;       ClipWait 0
-;       If ErrorLevel
-;       {
-;         MsgBox, No Text Selected !
-;           Return
-;       }
-;     }
-
-;     ClipboardRestore()
-;     {
-;       Clipboard := OldClipboard
-;     }
 
 ; ╭─────────────────────────────────────────────────────────────╮
 ; │       KEY HOTKEY DEFINITIONS: CORE FUNCTIONALITY            │
 ; │   Not affected by ToggleAuxHotkeys and ToggleAuxHotstrings  │
 ; ├─────────────────────────────────────────────────────────────┤
-; │  [CapsLock]+[K]    Toggle Aux Hotkeys                       │
-; │  [CapsLock]+[S]    Toggle Aux Hotsrings                     │
-; │  [CapsLock]+[R]    Reload this app                          │
-; │  [CapsLock]+[E]    Edit this AHK (default editor)           │
-; │  [CapsLock]+[F2]   AutoHotKey Help File                     │
+; │  [Ctrl]+[Win]+[Alt]+[K]    Toggle Aux Hotkeys               │
+; │  [Ctrl]+[Win]+[Alt]+[S]    Toggle Aux Hotsrings             │
+; │  [Ctrl]+[Win]+[Alt]+[R]    Reload this app                  │
+; │  [Ctrl]+[Win]+[Alt]+[E]    Edit this AHK (default editor)   │
+; │  [Ctrl]+[Win]+[Alt]+[F2]   AutoHotKey Help File             │
+; │  [Ctrl]+[Win]+[Alt]+[F12]  Put system to Sleep              │
+; │  [Win]+[F]                 Open the user's Documents folder │
 ; ╰─────────────────────────────────────────────────────────────╯
 
 ; [Ctrl]+[Alt]+[Win]+[K]: Toggle Aux Hotkeys
