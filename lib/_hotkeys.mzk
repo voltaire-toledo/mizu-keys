@@ -65,7 +65,6 @@
   ;│  [Ctrl]+[Alt]+[T] for Terminal                        │
   ;│  [Ctrl]+[Alt]+[Shift]+[T] for Terminal in Admin Mode  │
   ;╰───────────────────────────────────────────────────────╯
-
   LAlt & t::
   {
     ; [Ctrl]+[Alt]+[T] to run Terminal

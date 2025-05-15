@@ -88,7 +88,7 @@ CapsLock & o::
     "[E] Epic Pen`n"
     "[N] Notion`n"
     "[O] Outlook`n"
-    "[P] PowerPoint`n"
+    "[P] PowerPoint`n" 
     "[T] Windows Terminal`n"
     "[W] Word`n"
     "[X] Excel"
@@ -99,7 +99,7 @@ CapsLock & o::
   , "Theme:,,,"  LoadPicture(app_ico, "Icon1", &ImageType)
   , "FontMain:     S12 Bold, Arial"
   , "MainText:     Press a key to start an app:"
-  , "MainAlign:    +1"
+  , "MainAlign:    0"
   , "FontSub:      S12, Cascadia Mono"
   , "SubText:    " AppModeOptionsString
   , "SubAlign:     -1"
