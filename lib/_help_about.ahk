@@ -1,6 +1,24 @@
-#Requires Autohotkey v2
+﻿#Requires Autohotkey v2
 
-if A_LineFile = A_ScriptFullPath && !A_IsCompiled
+/*
+  ╭────────────────────────────────────────────────────────────────────╮
+  │ About...Dialog Box                                                 │
+  │ The dialog box the appears when you select "About FLOW Effortless" │
+  ├────────────────────────────────────────────────────────────────────┤
+  │                                                                    │
+  ╰────────────────────────────────────────────────────────────────────╯
+
+  TODO: 
+  [] Give credit to icons8.com for the icons
+  [] Give credit for WiseGui.ahk
+  [] Give credit to AutoHotkey GUI for generating this dialog box
+  [] List the version number of the current release
+  [] Provide address to GitHub repository
+  [] A tab for hotkeys
+  [] A tab for chords
+  [] A link to a YouTube channel that demos 
+*/
+ShowHelpAbout()
 {
 	dlgWidth := 740
 	dlgHeight := 560
@@ -8,11 +26,12 @@ if A_LineFile = A_ScriptFullPath && !A_IsCompiled
 
 	aboutDlg.Show("w" dlgWidth " h" dlgHeight)
 }
+
 ShowAboutDialog()
 {
 	; Dialog Construction	
 	aboutDlg := Gui()
-    aboutDlg.SetFont("q5 s10", "Segoe UI")
+  aboutDlg.SetFont("q5 s10", "Segoe UI")
 	aboutDlg.Opt("-MinimizeBox -MaximizeBox +AlwaysOnTop")
 
 	; First Line with link to docs
@@ -37,9 +56,9 @@ ShowAboutDialog()
 	; Close Button
 	buttonOK := aboutDlg.Add("Button", "x652 y529 w80 h23", "Close")
 	; ButtonOK := myGui.Add("Button", "x489 y373 w80 h22", "&OK")
-	; buttonOK.OnEvent("Click", ExitApp())
+	buttonOK.OnEvent("Click", (*) => aboutDlg.Destroy() )
+  aboutDlg.OnEvent('Close', (*) => aboutDlg.Destroy())
     
-    aboutDlg.OnEvent('Close', (*) => ExitApp())
 	aboutDlg.Title :=  "Mizu Keys - About"
 	return aboutDlg
 }
