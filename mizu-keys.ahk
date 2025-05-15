@@ -34,6 +34,7 @@ global regkey_sticky_keys := "HKEY_CURRENT_USER\Control Panel\Accessibility\Stic
 */
 #Include ".\lib\_apps_automations.mzk"
 #Include ".\lib\_about.ahk"
+#Include ".\lib\_help_about.ahk"
 #Include ".\lib\_traymenu.mzk"
 #Include ".\lib\_hotkeys.mzk"
 #Include ".\lib\_hotstrings.mzk"
@@ -132,6 +133,11 @@ EndScript(*)
 ; [Ctrl]+[Alt]+[Win]+[F2] to open the AutoHotkey Help File
 ^!#F2:: {
   ShowHelp()
+}
+
+; [Ctrl]+[Alt]+[Win]+[F1] to open the AutoHotkey Help File
+^!#F1:: {
+  ShowHelpAbout()
 }
 
 ; [Ctrl]+[Alt]+[Win]+[F12] to go to sleep mode

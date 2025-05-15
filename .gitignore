@@ -1,5 +1,6 @@
 
 # Ignore all files in the scratch and snippets foldres
+**/.playground/*
 
 # Ignore the AutoHotkey binaries; to be installed manually or via Mizu
 **/ahkbin*/*
