@@ -1,12 +1,9 @@
 #Requires AutoHotkey v2.0
 
-/*
-┌─────────────────────────────────────────────┐
-│  Auxillary hotkeys for common actions;      │
-│  customize the conditions to your liking.   │
-└─────────────────────────────────────────────┘
-*/
-
+;╭──────────────────────────────────────────╮
+;│ Ancillary hotkeys for common actions;    │
+;│ customize the conditions to your liking. │
+;╰──────────────────────────────────────────╯
 #HotIf (Aux_HotKeySupport = true)
 {
   ; ┌──────────────────────────────────────┐
@@ -42,36 +39,51 @@
     }
   }
 
-  /*╭────────────────────────────────────╮
-    │  [Win]]+[Shift]+[n] to run Notion  │
-    ╰────────────────────────────────────╯*/
-  ^#!n:: {
-    ; Path to Notion.exe
-    static notionIconPath := RegRead("HKCU\Software\Microsoft\Windows\CurrentVersion\Uninstall\661f0cc6-343a-59cb-a5e8-8f6324cc6998", "DisplayIcon")
-    static notionPath := SubStr(notionIconPath, 1, InStr(notionIconPath, ",") - 1)
-    If WinExist("ahk_exe Notion.exe")
+  ; ┌─────────────────────────────┐
+  ; │ [RCtrl]x2 to run Calculator │
+  ; └─────────────────────────────┘
+  ; Detects when a key has been double-pressed (similar to double-click). KeyWait is used to
+  ; stop the keyboard's auto-repeat feature from creating an unwanted double-press when you
+  ; hold down the RControl key to modify another key. It does this by keeping the hotkey's
+  ; thread running, which blocks the auto-repeats by relying upon #MaxThreadsPerHotkey being
+  ; at its default setting of 1. For a more elaborate script that distinguishes between
+  ; single, double and triple-presses, see SetTimer example #3.
+  ~RControl::
+  {
+    if (A_PriorHotkey != "~RControl" or A_TimeSincePriorHotkey > 400)
     {
-      WinActivate
-      SoundPlay sound_file_start
-      WinShow
-      Return
+      ; Too much time between presses, so this isn't a double-press.
+      KeyWait "RControl"
+      return
+    }
+
+    ; A double-press of the RControl key has occurred.
+    LaunchCalculator()
+  }
+
+  ;╭───────────────────────────────────────────────────────╮
+  ;│  [Ctrl]+[Alt]+[T] for Terminal                        │
+  ;│  [Ctrl]+[Alt]+[Shift]+[T] for Terminal in Admin Mode  │
+  ;╰───────────────────────────────────────────────────────╯
+  LAlt & t::
+  {
+    ; [Ctrl]+[Alt]+[T] to run Terminal
+    If GetKeyState("LShift", "P") && GetKeyState("Alt", "P") && GetKeyState("LCtrl", "P")
+    {
+      ; MsgBox "Run wt.exe as Admin"  ; DEBUG
+      Run "*RunAs wt.exe -w 0 new-tab --title Terminal(Admin) --suppressApplicationTitle"
+      exit ; return will only exit the current condition
+    }
+
+    If GetKeyState("LCtrl", "P") && GetKeyState("LAlt", "P")
+    {
+      LaunchTerminal()
     }
     Else
     {
-      If FileExist(notionPath)
-      {
-        Run notionPath
-        ; SoundPlay "*48"
-        Return
-      }
-      Else
-      {
-        SoundPlay sound_file_stop
-        Return
-      }
+      Send "T" ; This is to respond to [RShift}+[T]; otherwise, nothing will be sent
     }
   }
-
 
   /*╭───────────────────────────────────────────────────────────────────────────────╮
     │  Directional keys to scroll the active window. Useful for TKL keyboards       │

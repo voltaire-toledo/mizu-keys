@@ -1,5 +1,5 @@
-# FLOW STASIS
-This is the documentation for the FLOW Stasis project. FLOW Stasis is a project that aims to provide a platform for the development of a toolkit to promote an individual's ability to achieve focus and flow that is inclusive of our neurodivergent brothers and sisters. The project is developed by the [FLOW Team]. 
+# Mizu Keys
+This is the documentation for the Mizu Keys project. Mizu Keys is a project that aims to provide a platform for the development of a toolkit to promote an individual's ability to achieve focus and flow that is inclusive of our neurodivergent brothers and sisters. The project is developed by the [Mizu Team]. 
 
 > STASIS is a state of balance or equilibrium, in which opposing forces are equal and opposing influences are cancelled by each other. This project abbreviates STASIS for 'Systems of Tools And Strategies for Inclusive Success'.
 

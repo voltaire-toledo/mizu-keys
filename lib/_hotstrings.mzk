@@ -276,12 +276,12 @@
 
   ; Custom Strings
   ::`!magicip::168.63.129.16
-  ::`!me::Voltaire Toledo
-  ::`!nickname::Jigs
-  ::`!sig::Voltaire Toledo{ENTER}voltaire@voltol.com{ENTER}248•237•3251{ENTER}
-  ::`!myphone::(248)237-3251
-  ::`!work-email::voltaire.toledo@coretek.com
-  ::`!email::voltaire@voltol.com
+  ::`!me::Place Name Here
+  ::`!nickname::Your Nickname
+  ::`!sig::Name{ENTER}Email{ENTER}Phone#{ENTER}
+  ::`!myphone::Phone#
+  ::`!work-email::Work-Email
+  ::`!email::Personal-Email
 }
 #HotIf
 
