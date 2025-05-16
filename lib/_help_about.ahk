@@ -57,7 +57,7 @@ ShowAboutDialog()
 	buttonOK := aboutDlg.Add("Button", "x652 y529 w80 h23", "Close")
 	; ButtonOK := myGui.Add("Button", "x489 y373 w80 h22", "&OK")
 	buttonOK.OnEvent("Click", (*) => aboutDlg.Destroy() )
-  aboutDlg.OnEvent('Close', (*) => aboutDlg.Destroy())
+  	aboutDlg.OnEvent('Close', (*) => aboutDlg.Destroy())
     
 	aboutDlg.Title :=  "Mizu Keys - About"
 	return aboutDlg
