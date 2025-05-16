@@ -1,3 +1,4 @@
+
 #Requires Autohotkey v2
 
 /*

@@ -1,0 +1,29 @@
+﻿{
+  "aImageHistory":[
+    "C:\\Windows\\System32\\imageres.dll|icon234",
+    "C:\\Windows\\System32\\imageres.dll|icon244",
+    "C:\\Windows\\System32\\imageres.dll|icon84",
+    "C:\\Windows\\System32\\shell32.dll|icon259",
+    "C:\\Windows\\System32\\shell32.dll|icon261",
+    "C:\\Windows\\System32\\shell32.dll|icon4",
+    "C:\\Windows\\System32\\user32.dll|icon7"
+  ],
+  "aSoundHistory":[],
+  "closeMainExitApp":0,
+  "msg":"The quick brown fox jumps over the lazy dog.",
+  "openMainOnStart":0,
+  "savedColors":[
+    "0xFFA500",
+    "0xFFC0CB",
+    "0xA52A2A",
+    "0xFFD700",
+    "0x40E0D0",
+    "0xFF7F50",
+    "0xE6E6FA",
+    "0x4B0082"
+  ],
+  "soundOnSelection":0,
+  "theme":"Default",
+  "title":"My Title",
+  "trayMenuIconSize":24
+}
