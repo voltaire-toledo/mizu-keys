@@ -1,0 +1,459 @@
+#Requires AutoHotkey v2.0
+
+; ╭───────────╮
+; │ VARIABLES │
+; ╰───────────╯
+tray_icon_normal            := ".\media\icons\mizu-leaf.ico"
+tray_icon_pause_all         := ".\media\icons\sl-pause.ico"
+tray_icon_pause_hotkeys     := ".\media\icons\sl-pause.ico"
+tray_icon_pause_hotstrings  := ".\media\icons\sl-pause-hs.ico"
+tray_icon_suspend           := ".\media\icons\sl-suspend.ico"
+traymenu_icon_checked       := ".\media\icons\checked.ico"
+traymenu_icon_unchecked     := ".\media\icons\unchecked.ico"
+
+; custom tray menu items
+trayitem_app_ref             := "Mizu Keys"
+trayitem_app_ref_ico         := ".\media\icons\sl-normal.ico"
+trayitem_app_ref_ico         := ".\media\icons\keeb.ico"
+trayitem_about                := "About Mizu Keys"
+trayitem_about_ico            := tray_icon_normal
+trayitem_reload               := "&Reload Script`t[Ctrl+Win+Alt]+[R]"
+trayitem_reload_ico           := ".\media\icons\reload.ico"
+trayitem_toggle_hstrings      := "Aux Hot&Strings`t[Ctrl+Win+Alt]+[S]"
+trayitem_toggle_hstrings_ico  := traymenu_icon_checked
+trayitem_toggle_hkeys         := "Aux Hot&Keys`t[Ctrl+Win+Alt]+[K]"
+trayitem_toggle_hkeys_ico     := traymenu_icon_checked
+trayitem_debug                := "Debug Tools"
+trayitem_debug_ico            := ".\media\icons\debug.ico"
+trayitem_ahkhelp              := "AutoHotkey Help`t[Ctrl+Win+Alt]+[F2]"
+trayitem_ahkhelp_ico          := ".\media\icons\help.ico"
+trayitem_exit                 := "E&xit Mizu Keys"
+trayitem_exit_ico             := ".\media\icons\stop.ico"
+trayitem_edit                 := "E&dit Script`t[Ctrl+Win+Alt]+[E]"
+trayitem_edit_ico             := ".\media\icons\edit.ico"
+trayitem_runatstartup         := "Run at Startup"
+
+this_script_shorcut    := A_Startup "\" SubStr(A_ScriptName, 1, StrLen(A_ScriptName) - 4) ".lnk"
+If (FileExist(this_script_shorcut))
+{
+  trayitem_runatstartup_ico := traymenu_icon_checked
+}
+Else
+{
+  trayitem_runatstartup_ico := traymenu_icon_unchecked
+}
+
+
+; ╭───────────────────────╮
+; │  Build the Tray menu  │
+; ╰───────────────────────╯
+
+DisplayTrayMenu()
+{
+  /*
+  ╒═══════════════════════════════════════════════════════════════════════╕
+  │ Custom menu items                                                     │
+  ╞═══════════════════════════════════════════════════════════════════════╡
+  │ Reference: https://www.autohotkey.com/docs/v2/lib/Menu.htm#ExTray     │
+  └───────────────────────────────────────────────────────────────────────┘
+  */
+
+  ; Startup sound
+  SoundPlay toggle_sound_file_startrun
+  ; SoundPlay "*16"
+
+  ; Light/Dark Theme-safe colored Tray Icon
+  TraySetIcon tray_icon_normal
+
+  ; Set the Tray icon tooltip
+  global Tray := A_TrayMenu ; For convenience.
+  IconTipString := "
+    (
+      Mizu Keys Shortcuts
+      Last Run: `s
+    )" LaunchTime "
+    (
+      `nScript: `s
+    )" A_ScriptFullPath
+  A_IconTip := IconTipString
+
+  ; Delete the standard items. Not Required unless replacing
+  Tray.Delete()
+
+  ; Define the menu items
+  Tray.Add(trayitem_app_ref, DisplayShorcutKeys)
+  Tray.SetIcon(trayitem_app_ref, trayitem_app_ref_ico)
+
+  Tray.Add(trayitem_reload, ReloadAndReturn)
+  Tray.SetIcon(trayitem_reload, trayitem_reload_ico)
+
+  Tray.Add(trayitem_edit, EditAndReturn)
+  Tray.SetIcon(trayitem_edit, trayitem_edit_ico)
+
+  ; Enable Hotstrings as the default value
+  Tray.Add(trayitem_toggle_hstrings, ToggleAuxHotstrings)
+  global Aux_HotStringSupport := true
+  ; Tray.Check(trayitem_toggle_hstrings)
+  Tray.SetIcon(trayitem_toggle_hstrings, trayitem_toggle_hstrings_ico)
+
+  ; Enable HotKeys as the default value
+  Tray.Add(trayitem_toggle_hkeys, ToggleAuxHotkeys)
+  global Aux_HotKeySupport := true
+  ; Tray.Check(trayitem_toggle_hkeys)
+  Tray.SetIcon(trayitem_toggle_hkeys, trayitem_toggle_hkeys_ico)
+
+  Tray.Add(trayitem_runatstartup, ToggleRunAtStartup)
+  Tray.SetIcon(trayitem_runatstartup, trayitem_runatstartup_ico)
+
+  Tray.Add() ; separator
+  ; Tray.Add(trayitem_debug, ShowListLines)
+  DebugMenu := Menu()
+  Tray.Add(trayitem_debug, DebugMenu)
+  Tray.SetIcon(trayitem_debug, trayitem_debug_ico)
+  DebugMenu.Add("Key & Mouse Button History", ShowListLines)
+  DebugMenu.Add("Coming: KeyHistory", ShowListLines)
+  DebugMenu.Disable("Coming: KeyHistory")
+  ; DebugMenu.Add("List Hotkeys", ListSimpleHotkeys)
+  DebugMenu.Add("Coming: ListVars", ShowListLines)
+  DebugMenu.Disable("Coming: ListVars")
+  DebugMenu.Add("Coming: WindowsSpy", ShowListLines)
+  DebugMenu.Disable("Coming: WindowsSpy")
+  DebugMenu.Add("Open script folder", OpenScriptDir)
+
+  Tray.Add(trayitem_ahkhelp, ShowHelp)
+  Tray.SetIcon(trayitem_ahkhelp, trayitem_ahkhelp_ico)
+
+  Tray.Add() ; separator
+
+  Tray.Add(trayitem_exit, EndScript)
+  Tray.SetIcon(trayitem_exit, trayitem_exit_ico)
+
+  Tray.Add() ; separator
+
+  Tray.Add(trayitem_about, DisplayAbout)
+  Tray.SetIcon(trayitem_about, trayitem_about_ico)
+
+  ; Tray.Add("TestToggleEnable", ToggleTestEnable)
+  ; Tray.Add("Windows Spy", TestDefault)
+  ; Tray.Add() ; separator
+  ; Tray.Add("Suspend All", SuspendHotkeys)
+  ; Tray.Add("Exit", EndScript )
+
+
+  ; Set the default menu item for double-clicking the tray icon
+  Tray.Default := trayitem_app_ref
+
+  ; Make the tray menu when the tray icon is also left-clicked
+  OnMessage 0x404, Received_AHK_NOTIFYICON
+  Received_AHK_NOTIFYICON(wParam, lParam, nMsg, hwnd) {
+    if lParam = 0x202 { ; WM_LBUTTONUP
+      A_TrayMenu.Show
+      return 1
+    }
+  }
+}
+
+; ╭─────────────────────────────────────────────────────────────────────╮
+; │  Enable or Disable Auxillary hotkeys defined in AUX_HOTSTRINGS.AHK  │
+; ╰─────────────────────────────────────────────────────────────────────╯
+ToggleAuxHotstrings(*)
+{
+  global Aux_HotStringSupport := !Aux_HotStringSupport
+  if (Aux_HotStringSupport = true) {
+    IndicateToggle("Auxillary HotStrings", "hotkeys", true, true, true)
+    trayitem_toggle_hstrings_ico := traymenu_icon_checked
+  } else {
+    IndicateToggle("Auxillary HotStrings", "hotkeys", false, true, true)
+    trayitem_toggle_hstrings_ico := traymenu_icon_unchecked
+  }
+
+  Tray.SetIcon(trayitem_toggle_hstrings, trayitem_toggle_hstrings_ico)
+}
+
+; ╭──────────────────────────────────────────────────────────────────╮
+; │  Enable or Disable Auxillary hotkeys defined in AUX_HOTKEYS.AHK  │
+; ╰──────────────────────────────────────────────────────────────────╯
+ToggleAuxHotkeys(*)
+{
+  global Aux_HotKeySupport := !Aux_HotKeySupport
+  if (Aux_HotKeySupport = true) {
+    IndicateToggle("Auxillary HotKeys", "hotstrings", true, true, true)
+    trayitem_toggle_hkeys_ico := traymenu_icon_checked
+  } else {
+    IndicateToggle("Auxillary HotKyes", "hotstrings", false, true, true)
+    trayitem_toggle_hkeys_ico := traymenu_icon_unchecked
+  }
+
+  Tray.SetIcon(trayitem_toggle_hkeys, trayitem_toggle_hkeys_ico)
+}
+
+; ╭─────────────────────────────────────────────────╮
+; │  This will allow the script to run at startup.  │
+; ╰─────────────────────────────────────────────────╯
+ToggleRunAtStartup(*)
+{
+
+  ; DEBUG
+  global this_script_shorcut := A_Startup "\" SubStr(A_ScriptName, 1, StrLen(A_ScriptName) - 4) ".lnk"
+  ; MsgBox (
+  ; "A_Startup: " A_Startup
+  ; "`n`nA_ScriptDir: " A_ScriptDir
+  ; "`n`nA_ScriptFullPath: " A_ScriptFullPath
+  ; "`n`nA_ScriptName: " A_ScriptName
+  ; "`n`nA_AhkPath: " A_AhkPath
+  ; "`n`nnSubstring: " SubStr(A_ScriptName, 1, StrLen(A_ScriptName) - 4)
+  ; )
+
+  run A_Startup
+  If (FileExist(this_script_shorcut))
+  {
+    FileDelete(this_script_shorcut)
+    trayitem_runatstartup_ico := traymenu_icon_unchecked
+  }
+  Else
+  {
+    ; ICO issue fixed. See https://learn.microsoft.com/en-us/answers/questions/1162419/shortcut-icon-blank-when-ico-file-is-located-on-a
+    ; RegWrite(1, "REG_DWORD", "HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer", "EnableSOcShortcutIconRemotePath" )
+    ; TODO - if ICO is not in C: drive, copy the icon to the C:\temp folder before creating the shortcut
+    FileCreateShortcut(A_AhkPath, this_script_shorcut, A_ScriptDir, A_ScriptFullPath, "A script", A_ScriptDir tray_icon_normal, , ,)
+    trayitem_runatstartup_ico := traymenu_icon_checked
+  }
+  Tray.SetIcon(trayitem_runatstartup, trayitem_runatstartup_ico)
+}
+
+; ╭──────────────────────────────────────────────────────────────────────╮
+; │  Update the Tray Menu UI to indicate if a feature is enabled or not  │
+; ╰──────────────────────────────────────────────────────────────────────╯
+IndicateToggle(AppFeatureName, AppFeature, IsEnabled := false, DisplayChange := false, PlaySound := false)
+{
+  ; AppFeatureName is a string that indicates the FLOW feature being toggled
+
+  ; AppFeature is an Evaluated string that indicates the FLOW feature being toggled
+  ; Acceptable values (based on variable names): "hotkeys", "hotstrings", "all"
+
+  ; IsEnabled is a boolean that indicates whether the FLOW feature is enabled or disabled
+  if (Aux_HotStringSupport = false) and (Aux_HotKeySupport = false) {
+    ; Both features are off
+    AppFeature := "all"
+    TraySetIcon tray_icon_pause_%AppFeature% ; Set the normal icon
+  }
+
+  ; PlaySound parameter is a boolean that indicates whether to play a sound when toggling
+  if (PlaySound = true) {
+    if (IsEnabled = true) {
+      ; SoundPlay toggle_sound_file_enabled
+      SoundPlay "*16"
+    } else {
+      ; SoundPlay toggle_sound_file_disabled
+      SoundPlay "*48"
+    }
+  }
+
+  ; DisplayChange parameter is a boolean that indicates whether to display a message when toggling
+  if (DisplayChange = true) {
+    if (IsEnabled = true) {
+      gui_message := AppFeatureName " Enabled"
+      gui_theme := "Success"
+      TraySetIcon tray_icon_normal
+    } else {
+      gui_message := AppFeatureName " Disabled"
+      gui_theme := "Warning"
+      TraySetIcon tray_icon_pause_%AppFeature%
+    }
+
+    WiseGui(AppFeature
+      , "Theme:       " gui_theme
+      , "MainText:    " gui_message
+      , "Transparency: 192"
+      , "Show:         SlideWest@400ms"
+      , "Hide:         SlideEast@400ms"
+      , "Move:         -10, -1"
+      , "Timer:        2500"
+    )
+  }
+}
+
+/*
+╭────────────────╮
+│ ShowListLines  │
+╰────────────────╯ */
+ShowListLines(*)
+{
+  ListLines
+}
+
+/*
+╭────────────────────╮
+│ ListSimpleHotkeys  │
+╰────────────────────╯ */
+ListSimpleHotkeys(*)
+{
+  ListHotkeys
+}
+
+/*
+╭──────────────╮
+│ DisplayAbout │
+╰──────────────╯ */
+DisplayAbout(*)
+{
+  ; MsgBox "You selected " ItemName " (position " ItemPos ")"
+  HelpMessage := "
+    (
+        [CTRL]+[ALT]+[WIN]+[R]::`treload this script`n
+        [CTRL]+[ALT]+[Win]+[E]::`tedit this script`n
+        [CTRL]+[Win]+[B]::`tinsert a bullet point in any document`n
+        [LShift]+[RShift]+[T]::`trun Terminal`n
+        [LShift]+[RShift]+[CTRL]+[T]::`trun Terminal as Admin`n
+        [LShift]+[RShift]+[N]::`trun Notepad `n
+    )"
+  MsgBox HelpMessage, "FLOW Shortcut Keys"
+}
+
+/*
+╭───────────────╮
+│ OpenScriptDir │
+╰───────────────╯ */
+OpenScriptDir(*)
+{
+  Run A_ScriptDir
+}
+
+/*
+╭──────────╮
+│ ShowHelp │
+╰──────────╯ */
+ShowHelp(*)
+{
+  ; Open the regular help file
+  ; Determine AutoHotkey's location:
+  if A_AhkPath
+    SplitPath A_AhkPath, , &ahk_dir
+  else if FileExist("..\..\AutoHotkey.chm")
+    ahk_dir := "..\.."
+  else if FileExist(A_ProgramFiles "\AutoHotkey\AutoHotkey.chm")
+    ahk_dir := A_ProgramFiles "\AutoHotkey"
+  else
+  {
+    MsgBox "Could not find the AutoHotkey folder."
+    return
+  }
+  Run ahk_dir "\AutoHotkey.chm"
+  ; Run A_ProgramFiles "\AutoHotkey\v2\AutoHotkey.chm"
+
+  Return
+}
+
+/*
+╭────────────────────╮
+│ DisplayShortcuts() │
+╰────────────────────╯ */
+DisplayShorcutKeys(ItemName, ItemPos, Tray, Popup_Seconds := 0)
+{
+  /*
+  MsgBox "You selected " ItemName " (position " ItemPos ")"
+  HelpMessage := "
+      (
+      [CTRL]+[ALT]+[WIN]+[R]::`t reload this script`n
+      [CTRL]+[ALT]+[Win]+[E]::`tedit this script`n
+      [CTRL]+[Win]+[B]::`tinsert a bullet point`n
+      [LShift]+[RShift]+[T]::`trun Terminal`n
+      [LShift]+[RShift]+[CTRL]+[T]::`trun Terminal as Admin`n
+      [LShift]+[RShift]+[N]::`trun Notepad `n
+      )"
+  MsgBox HelpMessage, "FLOW Shortcut Keys", "Iconi 4096"
+  */
+  img_alt_key := ".\media\icons\alt_key.ico"
+  img_ctrl_key := ".\media\icons\ctrl_key.ico"
+  img_lshift_key := ".\media\icons\shiftl_key.png"
+  img_rshift_key := ".\media\icons\shiftr_key.png"
+  img_b_key := ".\media\icons\b_key.ico"
+  img_e_key := ".\media\icons\e_key.ico"
+  img_n_key := ".\media\icons\n_key.ico"
+  img_r_key := ".\media\icons\r_key.ico"
+  img_t_Key := ".\media\icons\t_key.ico"
+  img_win_key := ".\media\icons\win_key.ico"
+
+  SKey_Ref_UI := Gui("+MinSize600x400", "FLOW - Core Shortcut Keys")
+  SKey_Ref_UI.Opt("+AlwaysOnTop -SysMenu +Theme +MinSize600x400")  ; +Owner avoids a taskbar button.
+  ; SKey_Ref_UI.Opt("+AlwaysOnTop +Disabled -SysMenu +Owner")  ; +Owner avoids a taskbar button.
+
+  ; Column 1 - Descriptions
+  SKey_Ref_UI.SetFont("s13 q0 norm", "Calibri")
+  SKey_Ref_UI.Add("Text", "Section w180", "Reload this script")
+  SKey_Ref_UI.Add("Text", "w180", "Edit this script")
+  SKey_Ref_UI.Add("Text", "w180", "Toggle Non-Core HotKeys")
+  SKey_Ref_UI.Add("Text", "w180", "Toggle Non-Core HotStrings")
+  SKey_Ref_UI.Add("Text", "w180", "Run Terminal")
+  SKey_Ref_UI.Add("Text", "w180", "Run Terminal as Admin")
+  SKey_Ref_UI.Add("Text", "w180", "Run Notepad")
+
+  ; Column 2 - Hotkeys
+  SKey_Ref_UI.SetFont("s10 q0 norm", "Cascadia Mono")
+
+  ; New Column. Reload this script => [CTRL]+[ALT]+[WIN]+[R]
+  SKey_Ref_UI.Add("Picture", "ys Section h28 w-1 ", img_ctrl_key) ; x+4 to start at 4,0 after the last control
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_win_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_alt_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_r_key)
+
+  ; Edit this script => [CTRL]+[ALT]+[WIN]+[E]
+  SKey_Ref_UI.Add("Picture", "xs h28 w-1 ", img_ctrl_key) ; xs to start at 0,0 in the next row
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_win_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_alt_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_e_key)
+
+  ; Toggle Non-Core HotKeys => [CTRL]+[ALT]+[WIN]+[K]
+  SKey_Ref_UI.Add("Picture", "xs h28 w-1 ", img_ctrl_key) ; xs to start at 0,0 in the next row
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_win_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_alt_key)
+  ; SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_e_key)
+
+  ; Toggle Non-Core HotStrings => [CTRL]+[ALT]+[WIN]+[S]
+  SKey_Ref_UI.Add("Picture", "xs h28 w-1 ", img_ctrl_key) ; xs to start at 0,0 in the next row
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_win_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_alt_key)
+  ; SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_e_key)
+
+  ; Insert a bullet point
+  SKey_Ref_UI.Add("Picture", "xs h28 w-1 ", img_ctrl_key) ; xs to start at 0,0 in the next row
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_win_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_b_key)
+
+  ; Run Terminal => [LShift]+[RShift]+[T]
+  SKey_Ref_UI.Add("Picture", "xs h28 w-1 ", img_lshift_key) ; xs to start at 0,0 in the next row
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_rshift_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_t_key)
+
+  ; Run Terminal in Elevated window => [LShift]+[RShift]+[CTRL]+[T]
+  SKey_Ref_UI.Add("Picture", "xs h28 w-1 ", img_lshift_key) ; xs to start at 0,0 in the next row
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_rshift_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_ctrl_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_t_key)
+
+  ; Run Notepad => [LShift]+[RShift]+[N]
+  SKey_Ref_UI.Add("Picture", "xs h28 w-1 ", img_lshift_key) ; xs to start at 0,0 in the next row
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_rshift_key)
+  SKey_Ref_UI.Add("Picture", "h28 w-1 x+4", img_n_key)
+
+  ; CLOSE Button
+  ; SKey_Ref_UI.Add("Text",, "")
+
+  SKey_Ref_UI.SetFont("s10 q0 norm", "Calibri")
+  SKey_Ref_UI.Add("Button", "Section xm w100 x150", "Close").OnEvent("Click", About_Close)
+
+  ; Show window in the center of the main screen
+  SKey_Ref_UI.Show("Center")
+
+  If (Popup_Seconds > 0)
+  {
+    Sleep Popup_Seconds * 1000
+    SKey_Ref_UI.Destroy()
+  }
+
+  About_Close(*)
+  {
+    SKey_Ref_UI.Opt("-Disabled")  ; Re-enable the main window (must be done prior to the next step).
+    SKey_Ref_UI.Destroy()  ; Destroy the about box.
+  }
+}
