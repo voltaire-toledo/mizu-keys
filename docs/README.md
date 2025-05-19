@@ -12,6 +12,7 @@ This project is dedicated to removing friction from the process of achieving foc
 ## [Introduction](#introduction)
 
 ## Features
+[image of hotkeys]
 
 ## ⌨️ Hotkeys & Shortcuts
 

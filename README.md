@@ -13,7 +13,7 @@ Unleash a world of hotkeys, automations, and clever tricks, all wrapped up in a 
 - 🔊 Fun sound effects and notifications
 - 🧩 Modular library – add your own scripts!
 
-Check out the [full list hotkeys](docs/README.md#hotkeys) and [features](docs/README.md#features) to see what MIZU Keys can do for you!
+Check out the [full list of hotkeys and](docs/README.md#hotkeys) and [features](docs/README.md#features) to see what MIZU Keys can do for you!
 
 - 📜 [Documentation](docs/README.md) for all the nitty-gritty details
 
