@@ -33,9 +33,9 @@ global regkey_sticky_keys := "HKEY_CURRENT_USER\Control Panel\Accessibility\Stic
 ╰────────────────────────╯
 */
 #Include ".\lib\_apps_automations.mzk"
-#Include ".\lib\_about.ahk"
-#Include ".\lib\_help_about.ahk"
 #Include ".\lib\_traymenu.mzk"
+#Include ".\lib\_help_about.ahk"
+; #Include ".\lib\_about.ahk"
 #Include ".\lib\_hotkeys.mzk"
 #Include ".\lib\_hotstrings.mzk"
 #Include ".\lib\_alerts.mzk"
