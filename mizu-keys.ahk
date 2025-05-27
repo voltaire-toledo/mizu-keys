@@ -18,6 +18,7 @@ InstallKeybdHook
 │ GLOBAL SCOPE VARIABLES │
 ╰────────────────────────╯
 */
+global mizu_keys_version := "0.9.0_alpha (2024-06-01)"
 global process_theme := ""
 global app_ico := ".\media\icons\mizu-leaf.ico"
 global toggle_sound_file_startrun := A_Windir "\Media\Windows Unlock.wav"

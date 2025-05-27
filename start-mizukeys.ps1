@@ -11,16 +11,17 @@
 #>
 
 #region Configuration
+$InstallDir = Join-Path $env:LOCALAPPDATA 'Mizu-Keys'
 $ShortcutName = "Mizu Keys.lnk"
 $ShortcutDisplayName = "Mizu Keys"
 $AHKExecutableName = "AutoHotkey32.exe"
-$AHKBinPath = Join-Path -Path $PSScriptRoot -ChildPath "ahkbin"
-$Arguments = Join-Path -Path $PSScriptRoot -ChildPath "mizu-keys.ahk"
+$AHKBinPath = Join-Path -Path $InstallDir -ChildPath "ahkbin"
+$Arguments = Join-Path -Path $InstallDir -ChildPath "mizu-keys.ahk"
 $Description = "Start Mizu Keys"
-$IconPath = Join-Path -Path $PSScriptRoot -ChildPath "media\icons\mizu-leaf.ico"
+$IconPath = Join-Path -Path $InstallDir -ChildPath "media\icons\mizu-leaf.ico"
 $StartMenuFolderName = "Mizu"
 $AHKZipUrl = "https://www.autohotkey.com/download/2.0/AutoHotkey_2.0.19.zip"
-$AHKZipPath = Join-Path -Path $PSScriptRoot -ChildPath "AutoHotkey.zip"
+$AHKZipPath = Join-Path -Path $InstallDir -ChildPath "AutoHotkey.zip"
 #endregion
 
 # ╭───────────────────────────────────────────────────────╮
@@ -28,7 +29,7 @@ $AHKZipPath = Join-Path -Path $PSScriptRoot -ChildPath "AutoHotkey.zip"
 # | General Create-Directory function with error handling │
 # ╰───────────────────────────────────────────────────────╯
 #region Helper Functions
-function Ensure-Directory {
+function New-Directory {
     param([string] $Path)
     if (!(Test-Path -Path $Path -PathType Container)) {
         try {
@@ -47,7 +48,7 @@ function Ensure-Directory {
 # | Download and extract an approved AutoHotkey version │
 # ╰─────────────────────────────────────────────────────╯
 function Get-AutoHotkey {
-    if (!(Ensure-Directory -Path $AHKBinPath)) {
+    if (!(New-Directory -Path $AHKBinPath)) {
         return $false
     }
     Write-Output "Downloading AutoHotkey..."
@@ -114,6 +115,23 @@ function New-Shortcut {
 # ╭─────────────╮
 # │ Main Script │
 # ╰─────────────╯
+#region Main()
+# Ensure install directory exists and copy repo contents if needed
+if (!(Test-Path -Path $InstallDir)) {
+    if (!(New-Directory -Path $InstallDir)) {
+        Write-Error "Failed to create install directory. Exiting script."
+        exit 1
+    }
+    Write-Output "Copying files to $InstallDir..."
+    try {
+        Copy-Item -Path (Join-Path $PSScriptRoot '*') -Destination $InstallDir -Recurse -Force
+        Write-Output "Files copied to $InstallDir."
+    } catch {
+        Write-Error "Failed to copy files: $($_.Exception.Message)"
+        exit 1
+    }
+}
+
 # Get the path to the Start Menu Programs folder.
 $StartMenuPath = [Environment]::GetFolderPath("StartMenu")
 $StartMenuFolderPath = Join-Path -Path (Join-Path -Path $StartMenuPath -ChildPath "Programs") -ChildPath $StartMenuFolderName
@@ -127,7 +145,7 @@ if (!(Test-Path -Path $AHKBinPath)) {
 }
 
 # Ensure the Start Menu folder exists.
-if (!(Ensure-Directory -Path $StartMenuFolderPath)) {
+if (!(New-Directory -Path $StartMenuFolderPath)) {
     Write-Warning "Failed to create Start Menu folder. Using Start Menu root instead."
     $StartMenuFolderPath = $StartMenuPath
 }
@@ -137,8 +155,8 @@ $ShortcutPath = Join-Path -Path $StartMenuFolderPath -ChildPath $ShortcutName
 $TargetPath = Join-Path -Path $AHKBinPath -ChildPath $AHKExecutableName
 
 # Create the shortcut.
-$WorkingDirectory = Split-Path -Path $PSScriptRoot -Parent
-if (!(New-Shortcut -ShortcutPath $ShortcutPath -TargetPath $TargetPath -Arguments $Arguments -Description $Description -WorkingDirectory $PSScriptRoot -IconPath $IconPath -ShortcutDisplayName $ShortcutDisplayName)) {
+$WorkingDirectory = $InstallDir
+if (!(New-Shortcut -ShortcutPath $ShortcutPath -TargetPath $TargetPath -Arguments $Arguments -Description $Description -WorkingDirectory $InstallDir -IconPath $IconPath -ShortcutDisplayName $ShortcutDisplayName)) {
     Write-Error "Failed to create the shortcut. Exiting script."
     exit 1
 }
