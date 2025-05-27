@@ -9,10 +9,11 @@
   ╰────────────────────────────────────────────────────────────────────╯
 
   TODO:
-  [] Give credit to icons8.com for the icons
-  [] Give credit for WiseGui.ahk
-  [] Give credit to AutoHotkey GUI for generating this dialog box
-  [] List the version number of the current release
+  [] Add a link to the official documentation
+  [] Add a link to the GitHub repository
+  [] Add a link to the YouTube channel that demos the features
+  [] Add a link to the GitHub Sponsors page for donations
+  [] Add a link to the Ko-fi page for donations
   [] A link to a YouTube channel that demos
 */
 ShowHelpAbout(*) {
@@ -40,8 +41,13 @@ ShowAboutDialog(*) {
     aboutDlg.Add("StatusBar", "x0 y530 w740 h30", "  Hit the [Esc] key to close this window.")
 
     ; Tab Control
-    mainTab := aboutDlg.Add("Tab3", "x8 y40 w724 h480", ["About", "Hotkeys", "Function Keys", "Text Replacements",
-        "Chords", "Other Options"])
+    mainTab := aboutDlg.Add("Tab3", "x8 y40 w724 h480",
+        ["About",
+            "Hotkeys",
+            "Text Replacements",
+            "Function Keys",
+            "Chords",
+            "Other Options"])
 
     ; Tab 1 - About
     mainTab.UseTab(1)
@@ -51,41 +57,50 @@ ShowAboutDialog(*) {
     aboutDlg.SetFont("Bold s20", "Segoe UI")
     aboutDlg.Add("Text", "x72 y80 w470 h50", "Mizu Keys - Procutivity Shortcuts")
     aboutDlg.SetFont("q5 s10", "Segoe UI")
-    aboutDlg.Add("Text", "x72 y120 w400 h23", "Version: " mizu_keys_version)
-    aboutDlg.Add("Text", "x72 y140 w400 h23", "Licensed under the MIT License")
+    aboutDlg.Add("Text", "x72 y120 w600 h23", "Version: " thisapp_version)
+    aboutDlg.Add("Text", "x72 y140 w600 h23", "Licensed under the MIT License")
 
     ; Credit Section and Links to other resources
+    aboutDlg.SetFont("Bold s12", "Segoe UI")
+    aboutDlg.Add("Text", "x72 y180 w600 h23", "Credits and Resources")
     aboutDlg.SetFont("c000000 Norm q5 s10", "Segoe UI")
-    aboutDlg.Add("Link", "x72 y180 w400 h23",
-        "AutoHotkey binaries and libraries are available at <a href=`"https://www.autohotkey.com`">autohotkey.com</a>")
-    aboutDlg.Add("Link", "x72 y200 w400 h23", "Icons by <a href=`"https://icons8.com`">icons8.com</a>")
-    aboutDlg.Add("Link", "x72 y220 w300 h23",
-        "<a href=`"https://www.autohotkey.com/boards/viewtopic.php?f=83&t=94044`">WiseGUI.ahk library</a> by <a href=`"https://www.autohotkey.com/boards/memberlist.php?mode=viewprofile&u=54&sid=f3bac845536fc1eace03994a9e73273e`">SKAN</a>"
-    )
-
+    aboutDlg.Add("Link", "x72 y210 w600 h23",
+    "AutoHotkey (version " A_AhkVersion ") is available at <a href=`"https://www.autohotkey.com`">autohotkey.com</a>")
+    aboutDlg.Add("Link", "x72 y230 w600 h23", "Icons by <a href=`"https://icons8.com`">icons8.com</a>")
+    aboutDlg.Add("Link", "x72 y250 w600 h23",
+    "<a href=`"https://www.autohotkey.com/boards/viewtopic.php?f=83&t=94044`">WiseGUI.ahk library</a> by <a href=`"https://www.autohotkey.com/boards/memberlist.php?mode=viewprofile&u=54&sid=f3bac845536fc1eace03994a9e73273e`">SKAN</a>")
+    aboutDlg.Add("Link", "x72 y270 w300 h23",
+    "<a href=`"https://github.com/Ciantic/VirtualDesktopAccessor`">VirtualDesktopAccessor</a> by <a href=`"ttps://github.com/Ciantic`">Ciantic</a>")
+    
+    ; Tab 2 - Hotkeys
     mainTab.UseTab(2)
-    ; aboutDlg.SetFont("Bold", "Segoe UI")
-    ; aboutDlg.Add("Text", "x54 y80 w120 h23", "Text")
-    ; aboutDlg.SetFont("Norm q5 s10", "Segoe UI")
+    aboutDlg.SetFont("Bold s12", "Segoe UI")
+    aboutDlg.Add("Text", "x16 y80 w690 h23", "Core Hotkeys")
+    aboutDlg.SetFont("c000000 Norm q5 s10", "Segoe UI")
+    aboutDlg.Add("Text", "x16 y100 w690 h23", "The following hotkeys are available by default in this script. You can modify them in the script file or disable them if you prefer not to use them.")
+    aboutDlg.Add("Text", "x16 y120 w690 h23", "You can also add your own hotkeys in the script file, or use the auxiliary hotkeys feature to create custom hotkeys on the fly.")
     ; Add ListView for Hotkeys
-    lv := aboutDlg.Add("ListView", "r10 w600", ["Action", "Hotkey", "Description"])
-    lv.Opt("+Report +Sort")
+    lv_corehkeys := aboutDlg.Add("ListView", "r10 w690", ["Action", "Hotkey", "Description"])
+    lv_corehkeys.Opt("+Report +Sort")
     ; Set the column widths
 
     ; Example hotkeys - replace/add as needed for your project
-
-    lv.Add(, "Open Help", "[Ctrl] + [H]", "Show the help/about dialog")
-    lv.Add(, "Toggle Clipboard Manager", "[Ctrl] + [Shift] + [V]", "Open clipboard manager")
-    lv.Add(, "Insert Date", "Alt+D", "Insert current date at cursor")
-    lv.Add(, "Expand Text", "⊞ + ", "Replace with your address")
-    lv.Add(, "Launch Calculator", "Ctrl+Alt+C", "Open Windows Calculator")
-    lv.Add(, "Screenshot", "PrintScreen", "Take a screenshot and copy to clipboard")
-    lv.Add(, "Lock Workstation", "Win+L", "Lock the computer")
-    lv.Add(, "Mute Volume", "Ctrl+Alt+M", "Mute/unmute system volume")
-    lv.Add(, "Open Settings", "Ctrl+Alt+S", "Open Mizu Keys settings window")
-    lv.ModifyCol() ; Auto-size the first column
-    lv.ModifyCol(2) ; Auto-size the second column
-    lv.ModifyCol(3)
+    lv_corehkeys.Opt("-Redraw")
+    lv_corehkeys.Add(, "Toggle Aux Keys", "[Ctrl] + [⊞] + [Alt] + [K] ", "Toggle the auxiliary keys on/off")
+    lv_corehkeys.Add(, "Toggle Aux Hotstrings", "[Ctrl] + [⊞] + [Alt] + [S] ", "Toggle the auxiliary hotstrings on/off")
+    lv_corehkeys.Add(, "Reload and Restart " thisapp_name, "[Ctrl] + [⊞] + [Alt] + [R] ", "Reload and restart " thisapp_name)
+    lv_corehkeys.Add(, "AutoHotkey Help", "[Ctrl] + [⊞] + [Alt] + [F2]`t", "Open the AutoHotkey help docs")
+    lv_corehkeys.Add(, thisapp_name " Help", "[Ctrl] + [⊞] + [Alt] + [F1]`t", "Display this dialog")
+    lv_corehkeys.Add(, "Sleep", "[Ctrl] + [⊞] + [Alt] + [F12]`t", "Put this system to sleep")
+    lv_corehkeys.Add(, "Open the user's folder", "[⊞] + [F]`t", "Open the user's directory in File Explorer")
+    lv_corehkeys.Add(, "Edit this script", "[Ctrl] + [⊞] + [Alt] + [E]`t", "Open the main " thisapp_name " script in the default editor")
+    lv_corehkeys.Add(, "Open the " thisapp_name " folder", "[Ctrl] + [⊞] + [Alt] + [F]`t", "Open the " thisapp_name " folder in File Explorer")
+    lv_corehkeys.Add(, "Windows Terminal", "[Ctrl] + [Alt] + [T]`t", "Open a new Windows Terminal window, or return to the last active one")
+    lv_corehkeys.Add(, "Windows Terminal (Elevated)", "[Ctrl] + [Shift] + [Alt] + [T]`t", "Open an elevated Windows Terminal instance")
+    lv_corehkeys.ModifyCol() ; Auto-size the first column
+    lv_corehkeys.ModifyCol(2) ; Auto-size the second column
+    lv_corehkeys.ModifyCol(3)
+    lv_corehkeys.Opt("+Redraw")
 
     ; mainTab.UseTab()
 

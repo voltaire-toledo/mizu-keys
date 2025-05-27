@@ -18,7 +18,8 @@ InstallKeybdHook
 │ GLOBAL SCOPE VARIABLES │
 ╰────────────────────────╯
 */
-global mizu_keys_version := "0.9.0_alpha (2024-06-01)"
+global thisapp_name := "Mizu Keys"
+global thisapp_version := "0.9.0_alpha (2024-06-01)"
 global process_theme := ""
 global app_ico := ".\media\icons\mizu-leaf.ico"
 global toggle_sound_file_startrun := A_Windir "\Media\Windows Unlock.wav"
@@ -52,6 +53,7 @@ global regkey_sticky_keys := "HKEY_CURRENT_USER\Control Panel\Accessibility\Stic
 ╰────────────────────────╯
 */
 LaunchTime := FormatTime()
+SetWorkingDir(A_ScriptDir)
 DisplayTrayMenu()
 
 /*
@@ -74,29 +76,6 @@ EndScript(*)
 {
   ExitApp
 }
-
-
-/*
-╭───────────────────────────────────────────────────────────────╮
-│ CAPS LOCK Genius!                                             │
-│
-│ Double tap to toggle the Caps Lock feature.                   │
-│ Hold down the Caps Lock key as a modifier to trigger hotkeys. │
-│                                                               │
-╰───────────────────────────────────────────────────────────────╯
-*/
-; CapsLock:: {
-;   KeyWait "CapsLock" ; Wait forever until Capslock is released.
-;   KeyWait "CapsLock", "D T0.2" ; ErrorLevel = 1 if CapsLock not down within 0.2 seconds.
-
-;   if (A_PriorKey = "CapsLock") ; Is a double tap on CapsLock?
-;   {
-;     SetCapsLockState !GetKeyState("CapsLock", "T")
-;   }
-;   return
-; }
-
-
 
 ; ╭─────────────────────────────────────────────────────────────╮
 ; │       KEY HOTKEY DEFINITIONS: CORE FUNCTIONALITY            │
@@ -130,13 +109,44 @@ EndScript(*)
 ^!#e:: {
   EditAndReturn()
 }
+; ; [Ctrl]+[Alt]+[Win]+[Right] - Move window to next virtual desktop
+; ^!#Right:: {
+;   MoveWindowToDesktop("next")
+; }
+
+; ; [Ctrl]+[Alt]+[Win]+[Left] - Move window to previous virtual desktop
+; ^!#Left:: {
+;   MoveWindowToDesktop("prev")
+; }
+
+; MoveWindowToDesktop(direction) {
+;   ; Requires VirtualDesktopAccessor.dll in script directory
+;   static vda := DllCall("LoadLibrary", "Str", ".\lib\VirtualDesktopAccessor.dll", "Ptr")
+;   if !vda {
+;     MsgBox "VirtualDesktopAccessor.dll not found in script directory."
+;     return
+;   }
+;   hwnd := WinExist("A")
+;   if !hwnd
+;     return
+;   ; Get current desktop
+;   curr := DllCall(".\lib\VirtualDesktopAccessor.dll\GetWindowDesktopNumber", "Ptr", hwnd, "Int")
+;   total := DllCall(".\lib\VirtualDesktopAccessor.dll\GetDesktopCount", "Int")
+;   if (direction = "next")
+;     target := Mod(curr, total)
+;   else if (direction = "prev")
+;     target := Mod(curr - 2 + total, total)
+;   else
+;     return
+;   DllCall(".\lib\VirtualDesktopAccessor.dll\MoveWindowToDesktopNumber", "Ptr", hwnd, "Int", target)
+; }
 
 ; [Ctrl]+[Alt]+[Win]+[F2] to open the AutoHotkey Help File
 ^!#F2:: {
   ShowHelp()
 }
 
-; [Ctrl]+[Alt]+[Win]+[F1] to open the AutoHotkey Help File
+; [Ctrl]+[Alt]+[Win]+[F1] to open this App's Help -> About dialog
 ^!#F1:: {
   ShowHelpAbout()
 }
@@ -146,11 +156,16 @@ EndScript(*)
   Run "rundll32.exe powrprof.dll,SetSuspendState 0,1,0"
 }
 
+; [Ctrl]+[Alt]+[Win]+[F] to open this script's folder in File Explorer
+^!#f:: {
+  Run "explorer.exe " A_ScriptDir
+}
+
 ; [Win]+[F] to open the File Explorer in the user's Documents folder
 #f:: {
   Run "explorer.exe ~"
 }
-CapsLock & p:: Send "^+x"
+; CapsLock & p:: Send "^+x"
 
 CapsLock & F3:: F23
 CapsLock & F4:: F24
