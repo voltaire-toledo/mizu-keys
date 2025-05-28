@@ -22,6 +22,7 @@ $IconPath = Join-Path -Path $InstallDir -ChildPath "media\icons\mizu-leaf.ico"
 $StartMenuFolderName = "Mizu"
 $AHKZipUrl = "https://www.autohotkey.com/download/2.0/AutoHotkey_2.0.19.zip"
 $AHKZipPath = Join-Path -Path $InstallDir -ChildPath "AutoHotkey.zip"
+isRunFromUrl = $false
 #endregion
 
 # ╭───────────────────────────────────────────────────────╮
@@ -116,6 +117,10 @@ function New-Shortcut {
 # │ Main Script │
 # ╰─────────────╯
 #region Main()
+# Determine if the script was invoked from a URL or from a file.
+if ($null -eq $MyInvocation.MyCommand.Path -or $MyInvocation.MyCommand.Path -eq '-') {
+    $isRunFromUrl = $true
+}
 # Ensure install directory exists and copy repo contents if needed
 if (!(Test-Path -Path $InstallDir)) {
     if (!(New-Directory -Path $InstallDir)) {

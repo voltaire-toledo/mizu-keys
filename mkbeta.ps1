@@ -30,7 +30,7 @@ $psHost = $Host.Name
 $psVersion = $PSVersionTable.PSVersion.ToString()
 $cwd = Get-Location | Select-Object -ExpandProperty Path
 $scriptPath = $MyInvocation.MyCommand.Path
-
+Write-Host $MyInvocation | fl -force
 if ([string]::IsNullOrEmpty($scriptPath)) {
     throw "Script path is null or empty. Cannot determine script directory."
 }
