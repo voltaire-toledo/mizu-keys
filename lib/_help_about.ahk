@@ -70,17 +70,19 @@ ShowAboutDialog(*) {
     aboutDlg.Add("Link", "x72 y250 w600 h23",
     "<a href=`"https://www.autohotkey.com/boards/viewtopic.php?f=83&t=94044`">WiseGUI.ahk library</a> by <a href=`"https://www.autohotkey.com/boards/memberlist.php?mode=viewprofile&u=54&sid=f3bac845536fc1eace03994a9e73273e`">SKAN</a>")
     aboutDlg.Add("Link", "x72 y270 w300 h23",
-    "<a href=`"https://github.com/Ciantic/VirtualDesktopAccessor`">VirtualDesktopAccessor</a> by <a href=`"ttps://github.com/Ciantic`">Ciantic</a>")
+    "<a href=`"https://github.com/FuPeiJiang/VD.ahk/tree/v2_port`">VD.ahk library</a> by <a href=`"https://github.com/FuPeiJiang`">FuPeiJiang</a>")
+    ; aboutDlg.Add("Link", "x72 y270 w300 h23",
+    ; "<a href=`"https://github.com/Ciantic/VirtualDesktopAccessor`">VirtualDesktopAccessor</a> by <a href=`"https://github.com/Ciantic`">Ciantic</a>")
     
     ; Tab 2 - Hotkeys
     mainTab.UseTab(2)
     aboutDlg.SetFont("Bold s12", "Segoe UI")
     aboutDlg.Add("Text", "x16 y80 w690 h23", "Core Hotkeys")
     aboutDlg.SetFont("c000000 Norm q5 s10", "Segoe UI")
-    aboutDlg.Add("Text", "x16 y100 w690 h23", "The following hotkeys are available by default in this script. You can modify them in the script file or disable them if you prefer not to use them.")
-    aboutDlg.Add("Text", "x16 y120 w690 h23", "You can also add your own hotkeys in the script file, or use the auxiliary hotkeys feature to create custom hotkeys on the fly.")
+    aboutDlg.Add("Text", "x16 y100 w720 h23", "The following hotkeys are available by default in this script.")
+    ; aboutDlg.Add("Text", "x16 y120 w720 h23", "You can also add your own hotkeys in the script file, or use the auxiliary hotkeys feature to create custom hotkeys on the fly.")
     ; Add ListView for Hotkeys
-    lv_corehkeys := aboutDlg.Add("ListView", "r10 w690", ["Action", "Hotkey", "Description"])
+    lv_corehkeys := aboutDlg.Add("ListView", "r10 w720", ["Action", "Hotkey", "Description"])
     lv_corehkeys.Opt("+Report +Sort")
     ; Set the column widths
 

@@ -124,6 +124,22 @@ if (!(Test-Path -Path $InstallDir)) {
     }
     Write-Output "Copying files to $InstallDir..."
     try {
+        # Download and extract the latest release from the main branch
+        $RepoZipUrl = "https://github.com/voltaire-toledo/mizu-keys/archive/refs/heads/main.zip"
+        $RepoZipPath = Join-Path $env:TEMP "mizu-keys-main.zip"
+        try {
+            Invoke-WebRequest -Uri $RepoZipUrl -OutFile $RepoZipPath -ErrorAction Stop
+            $TempExtractPath = Join-Path $env:TEMP "mizu-keys-extract"
+            if (Test-Path $TempExtractPath) { Remove-Item $TempExtractPath -Recurse -Force }
+            Expand-Archive -Path $RepoZipPath -DestinationPath $TempExtractPath -Force
+            $SourceFolder = Join-Path $TempExtractPath "mizu-keys-main\mizu-keys"
+            Copy-Item -Path (Join-Path $SourceFolder '*') -Destination $InstallDir -Recurse -Force
+            Remove-Item $RepoZipPath -Force
+            Remove-Item $TempExtractPath -Recurse -Force
+        } catch {
+            Write-Error "Failed to download or extract Mizu Keys files: $($_.Exception.Message)"
+            exit 1
+        }
         Copy-Item -Path (Join-Path $PSScriptRoot '*') -Destination $InstallDir -Recurse -Force
         Write-Output "Files copied to $InstallDir."
     } catch {

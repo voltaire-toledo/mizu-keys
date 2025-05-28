@@ -10,7 +10,7 @@
 #SingleInstance Force
 SendMode "Input"    ; Use default Windows response to built-in responses to keyboard shortcutsm, e.g. [Alt]+[<-]
 SetTitleMatchMode 2 ; Default matching behavior for searches using WinTitle, e.g. WinWait
-InstallKeybdHook
+InstallKeybdHook  ; Install the keyboard hook to capture key events
 ; InstallMouseHook
 
 /*
@@ -44,6 +44,7 @@ global regkey_sticky_keys := "HKEY_CURRENT_USER\Control Panel\Accessibility\Stic
 #Include ".\lib\_mizuclick.mzk"
 #include ".\lib\_arpeggios.mzk"
 #Include ".\lib\WiseGui.ahk"
+#include ".\lib\_virtual_desktops.mzk"
 ; #Include ".\lib\_time_functions.ahk"
 ; #Include ".\lib\_screen_notifications.ahk"
 
@@ -109,37 +110,6 @@ EndScript(*)
 ^!#e:: {
   EditAndReturn()
 }
-; ; [Ctrl]+[Alt]+[Win]+[Right] - Move window to next virtual desktop
-; ^!#Right:: {
-;   MoveWindowToDesktop("next")
-; }
-
-; ; [Ctrl]+[Alt]+[Win]+[Left] - Move window to previous virtual desktop
-; ^!#Left:: {
-;   MoveWindowToDesktop("prev")
-; }
-
-; MoveWindowToDesktop(direction) {
-;   ; Requires VirtualDesktopAccessor.dll in script directory
-;   static vda := DllCall("LoadLibrary", "Str", ".\lib\VirtualDesktopAccessor.dll", "Ptr")
-;   if !vda {
-;     MsgBox "VirtualDesktopAccessor.dll not found in script directory."
-;     return
-;   }
-;   hwnd := WinExist("A")
-;   if !hwnd
-;     return
-;   ; Get current desktop
-;   curr := DllCall(".\lib\VirtualDesktopAccessor.dll\GetWindowDesktopNumber", "Ptr", hwnd, "Int")
-;   total := DllCall(".\lib\VirtualDesktopAccessor.dll\GetDesktopCount", "Int")
-;   if (direction = "next")
-;     target := Mod(curr, total)
-;   else if (direction = "prev")
-;     target := Mod(curr - 2 + total, total)
-;   else
-;     return
-;   DllCall(".\lib\VirtualDesktopAccessor.dll\MoveWindowToDesktopNumber", "Ptr", hwnd, "Int", target)
-; }
 
 ; [Ctrl]+[Alt]+[Win]+[F2] to open the AutoHotkey Help File
 ^!#F2:: {
