@@ -38,7 +38,7 @@ $msg = @"
 PowerShell Host: $psHost
 PowerShell Version: $psVersion
 Current Directory: $cwd
-Script Path: $scriptPath
+Script Path: $MyInvocation.MyCommand.Path
 
 Directory Contents:
 $dirList
