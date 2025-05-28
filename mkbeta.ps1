@@ -30,6 +30,11 @@ $psHost = $Host.Name
 $psVersion = $PSVersionTable.PSVersion.ToString()
 $cwd = Get-Location | Select-Object -ExpandProperty Path
 $scriptPath = $MyInvocation.MyCommand.Path
+
+if ([string]::IsNullOrEmpty($scriptPath)) {
+    throw "Script path is null or empty. Cannot determine script directory."
+}
+
 $scriptDir = Split-Path -Path $scriptPath -Parent
 $dirContents = Get-ChildItem -Path $scriptDir | Select-Object -ExpandProperty Name
 $dirList = $dirContents -join "`n"
