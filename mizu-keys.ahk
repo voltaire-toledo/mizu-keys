@@ -29,6 +29,16 @@ global sound_file_start := ".\media\sounds\start-13691.wav"
 global sound_file_stop := ".\media\sounds\stop-13692.wav"
 global regkey_sticky_keys := "HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys"
 
+; --- Splash Screen Modal ---
+global app_splashGUI := Gui("+AlwaysOnTop +ToolWindow -Caption", "Mizu Keys Splash")
+app_splashGUI.BackColor := "White"
+app_splashGUI.SetFont("s14", "Segoe UI")
+app_splashGUI.AddPicture("x20 y20 w48 h48 Icon1", app_ico)
+app_splashGUI.SetFont("s16 bold", "Segoe UI")
+app_splashGUI.AddText("x80 y30", "Mizu Keys " thisapp_version)
+app_splashGUI.Show("w320 h90 Center")
+; --- End Splash Screen ---
+
 /*
 ╭────────────────────────╮
 │ LIBRARY INCLUDES       │
@@ -56,6 +66,9 @@ global regkey_sticky_keys := "HKEY_CURRENT_USER\Control Panel\Accessibility\Stic
 LaunchTime := FormatTime()
 SetWorkingDir(A_ScriptDir)
 DisplayTrayMenu()
+
+; Hide splash after tray menu is ready
+app_splashGUI.Destroy()
 
 /*
 ╭────────────────────────╮

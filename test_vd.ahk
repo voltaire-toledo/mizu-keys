@@ -63,7 +63,7 @@ myGui.show()
 ;END of gui stuff
 
 ;include the library
-#Include %A_LineFile%\..\_virtual_desktops.mzk
+#Include .\lib\_virtual_desktops.mzk
 
 ;#SETUP END
 
