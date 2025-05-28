@@ -22,7 +22,7 @@ $IconPath = Join-Path -Path $InstallDir -ChildPath "media\icons\mizu-leaf.ico"
 $StartMenuFolderName = "Mizu"
 $AHKZipUrl = "https://www.autohotkey.com/download/2.0/AutoHotkey_2.0.19.zip"
 $AHKZipPath = Join-Path -Path $InstallDir -ChildPath "AutoHotkey.zip"
-isRunFromUrl = $false
+$isRunFromUrl = $false
 #endregion
 
 # ╭───────────────────────────────────────────────────────╮
@@ -121,6 +121,21 @@ function New-Shortcut {
 if ($null -eq $MyInvocation.MyCommand.Path -or $MyInvocation.MyCommand.Path -eq '-') {
     $isRunFromUrl = $true
 }
+
+if ($isRunfromURL) {
+    # Download and extract zip to $InstallDir
+    # ...existing code for downloading and extracting...
+    & "$InstallDir\autohotkey32.exe" # Run after extraction
+} else {
+    $ahkPath = Join-Path -Path "." -ChildPath "ahkbin\autohotkey32.exe"
+    if (Test-Path $ahkPath) {
+        & $ahkPath # Run if present
+    } else {
+        Write-Error "AutoHotKey not found in ./ahkbin directory."
+        exit 1
+    }
+}
+
 # Ensure install directory exists and copy repo contents if needed
 if (!(Test-Path -Path $InstallDir)) {
     if (!(New-Directory -Path $InstallDir)) {

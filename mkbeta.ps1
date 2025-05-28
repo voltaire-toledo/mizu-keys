@@ -30,7 +30,10 @@ $psHost = $Host.Name
 $psVersion = $PSVersionTable.PSVersion.ToString()
 $cwd = Get-Location | Select-Object -ExpandProperty Path
 $scriptPath = $MyInvocation.MyCommand.Path
-Write-Host $MyInvocation | fl -force
+# Detect if script is being run via Invoke-RestMethod (i.e., not from a file on disk)
+if ($null -eq $MyInvocation.MyCommand.Path -or $MyInvocation.MyCommand.Path -eq '-') {
+    throw "This script appears to be run directly from Invoke-RestMethod or similar. Please download and run the script from disk."
+}
 if ([string]::IsNullOrEmpty($scriptPath)) {
     throw "Script path is null or empty. Cannot determine script directory."
 }
