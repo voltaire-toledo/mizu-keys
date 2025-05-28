@@ -40,9 +40,6 @@ else {
     trayitem_runatstartup_ico := traymenu_icon_unchecked
 }
 
-
-
-
 ; ╭───────────────────────╮
 ; │  Build the Tray menu  │
 ; ╰───────────────────────╯
