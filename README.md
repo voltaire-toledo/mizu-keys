@@ -30,10 +30,13 @@ iex "& { $(irm 'https://raw.githubusercontent.com/voltaire-toledo/mizu-keys/main
 
 This will:
 
-- Download the latest MIZU Keys release from GitHub
+- Download the latest MIZU Keys release from GitHub  
 - Set up AutoHotkey (portable, no admin install needed)
 - Create a Start Menu shortcut
 - Launch MIZU Keys for you!
+
+> [!NOTE]  
+> The script will automatically install it into your profile's %LOCALAPPDATA%\Mizu-Keys directory.
 
 ---
 

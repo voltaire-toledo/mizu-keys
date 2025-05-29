@@ -10,7 +10,7 @@
 #SingleInstance Force
 SendMode "Input"    ; Use default Windows response to built-in responses to keyboard shortcutsm, e.g. [Alt]+[<-]
 SetTitleMatchMode 2 ; Default matching behavior for searches using WinTitle, e.g. WinWait
-InstallKeybdHook
+InstallKeybdHook  ; Install the keyboard hook to capture key events
 ; InstallMouseHook
 
 /*
@@ -18,6 +18,8 @@ InstallKeybdHook
 │ GLOBAL SCOPE VARIABLES │
 ╰────────────────────────╯
 */
+global thisapp_name := "Mizu Keys"
+global thisapp_version := "0.9.0_alpha (2024-06-01)"
 global process_theme := ""
 global app_ico := ".\media\icons\mizu-leaf.ico"
 global toggle_sound_file_startrun := A_Windir "\Media\Windows Unlock.wav"
@@ -26,6 +28,16 @@ global toggle_sound_file_disabled := ".\media\sounds\01_disable.wav"
 global sound_file_start := ".\media\sounds\start-13691.wav"
 global sound_file_stop := ".\media\sounds\stop-13692.wav"
 global regkey_sticky_keys := "HKEY_CURRENT_USER\Control Panel\Accessibility\StickyKeys"
+
+; --- Splash Screen Modal ---
+global app_splashGUI := Gui("+AlwaysOnTop +ToolWindow -Caption", "Mizu Keys Splash")
+app_splashGUI.BackColor := "White"
+app_splashGUI.SetFont("s14", "Segoe UI")
+app_splashGUI.AddPicture("x20 y20 w48 h48 Icon1", app_ico)
+app_splashGUI.SetFont("s16 bold", "Segoe UI")
+app_splashGUI.AddText("x80 y30", "Mizu Keys " thisapp_version)
+app_splashGUI.Show("w320 h90 Center")
+; --- End Splash Screen ---
 
 /*
 ╭────────────────────────╮
@@ -42,6 +54,7 @@ global regkey_sticky_keys := "HKEY_CURRENT_USER\Control Panel\Accessibility\Stic
 #Include ".\lib\_mizuclick.mzk"
 #include ".\lib\_arpeggios.mzk"
 #Include ".\lib\WiseGui.ahk"
+#include ".\lib\_virtual_desktops.mzk"
 ; #Include ".\lib\_time_functions.ahk"
 ; #Include ".\lib\_screen_notifications.ahk"
 
@@ -51,7 +64,11 @@ global regkey_sticky_keys := "HKEY_CURRENT_USER\Control Panel\Accessibility\Stic
 ╰────────────────────────╯
 */
 LaunchTime := FormatTime()
+SetWorkingDir(A_ScriptDir)
 DisplayTrayMenu()
+
+; Hide splash after tray menu is ready
+app_splashGUI.Destroy()
 
 /*
 ╭────────────────────────╮
@@ -73,29 +90,6 @@ EndScript(*)
 {
   ExitApp
 }
-
-
-/*
-╭───────────────────────────────────────────────────────────────╮
-│ CAPS LOCK Genius!                                             │
-│
-│ Double tap to toggle the Caps Lock feature.                   │
-│ Hold down the Caps Lock key as a modifier to trigger hotkeys. │
-│                                                               │
-╰───────────────────────────────────────────────────────────────╯
-*/
-; CapsLock:: {
-;   KeyWait "CapsLock" ; Wait forever until Capslock is released.
-;   KeyWait "CapsLock", "D T0.2" ; ErrorLevel = 1 if CapsLock not down within 0.2 seconds.
-
-;   if (A_PriorKey = "CapsLock") ; Is a double tap on CapsLock?
-;   {
-;     SetCapsLockState !GetKeyState("CapsLock", "T")
-;   }
-;   return
-; }
-
-
 
 ; ╭─────────────────────────────────────────────────────────────╮
 ; │       KEY HOTKEY DEFINITIONS: CORE FUNCTIONALITY            │
@@ -135,7 +129,7 @@ EndScript(*)
   ShowHelp()
 }
 
-; [Ctrl]+[Alt]+[Win]+[F1] to open the AutoHotkey Help File
+; [Ctrl]+[Alt]+[Win]+[F1] to open this App's Help -> About dialog
 ^!#F1:: {
   ShowHelpAbout()
 }
@@ -145,11 +139,16 @@ EndScript(*)
   Run "rundll32.exe powrprof.dll,SetSuspendState 0,1,0"
 }
 
+; [Ctrl]+[Alt]+[Win]+[F] to open this script's folder in File Explorer
+^!#f:: {
+  Run "explorer.exe " A_ScriptDir
+}
+
 ; [Win]+[F] to open the File Explorer in the user's Documents folder
 #f:: {
   Run "explorer.exe ~"
 }
-CapsLock & p:: Send "^+x"
+; CapsLock & p:: Send "^+x"
 
 CapsLock & F3:: F23
 CapsLock & F4:: F24
