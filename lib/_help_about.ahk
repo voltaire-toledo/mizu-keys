@@ -77,12 +77,12 @@ ShowAboutDialog(*) {
     ; Tab 2 - Hotkeys
     mainTab.UseTab(2)
     aboutDlg.SetFont("Bold s12", "Segoe UI")
-    aboutDlg.Add("Text", "x16 y80 w690 h23", "Core Hotkeys")
+    aboutDlg.Add("Text", "x16 y70 w690 h23", "Core Hotkeys")
     aboutDlg.SetFont("c000000 Norm q5 s10", "Segoe UI")
-    aboutDlg.Add("Text", "x16 y100 w720 h23", "The following hotkeys are available by default in this script.")
+    aboutDlg.Add("Text", "x16 y90 w720 h23", "The following hotkeys are available by default in this script. Go ahead and try them out!")
     ; aboutDlg.Add("Text", "x16 y120 w720 h23", "You can also add your own hotkeys in the script file, or use the auxiliary hotkeys feature to create custom hotkeys on the fly.")
     ; Add ListView for Hotkeys
-    lv_corehkeys := aboutDlg.Add("ListView", "r10 w720", ["Action", "Hotkey", "Description"])
+    lv_corehkeys := aboutDlg.Add("ListView", "r14 w710", ["Action", "Hotkey", "Description"])
     lv_corehkeys.Opt("+Report +Sort")
     ; Set the column widths
 
@@ -97,8 +97,9 @@ ShowAboutDialog(*) {
     lv_corehkeys.Add(, "Open the user's folder", "[⊞] + [F]`t", "Open the user's directory in File Explorer")
     lv_corehkeys.Add(, "Edit this script", "[Ctrl] + [⊞] + [Alt] + [E]`t", "Open the main " thisapp_name " script in the default editor")
     lv_corehkeys.Add(, "Open the " thisapp_name " folder", "[Ctrl] + [⊞] + [Alt] + [F]`t", "Open the " thisapp_name " folder in File Explorer")
-    lv_corehkeys.Add(, "Windows Terminal", "[Ctrl] + [Alt] + [T]`t", "Open a new Windows Terminal window, or return to the last active one")
+    lv_corehkeys.Add(, "Windows Terminal", "[Ctrl] + [Alt] + [T]`t", "Open or focus the Windows Terminal window")
     lv_corehkeys.Add(, "Windows Terminal (Elevated)", "[Ctrl] + [Shift] + [Alt] + [T]`t", "Open an elevated Windows Terminal instance")
+    lv_corehkeys.Add(, "Open Calculator", "2 × [Right_Ctrl]`t", "Open or focus the Calculator app")
     lv_corehkeys.ModifyCol() ; Auto-size the first column
     lv_corehkeys.ModifyCol(2) ; Auto-size the second column
     lv_corehkeys.ModifyCol(3)

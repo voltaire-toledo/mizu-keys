@@ -35,8 +35,10 @@ app_splashGUI.BackColor := "White"
 app_splashGUI.SetFont("s14", "Segoe UI")
 app_splashGUI.AddPicture("x20 y20 w48 h48 Icon1", app_ico)
 app_splashGUI.SetFont("s16 bold", "Segoe UI")
-app_splashGUI.AddText("x80 y30", "Mizu Keys " thisapp_version)
-app_splashGUI.Show("w320 h90 Center")
+app_splashGUI.AddText("x80 y20", "Mizu Keys")
+app_splashGUI.SetFont("s9 norm", "Segoe UI")
+app_splashGUI.AddText("x80 y50", "Version " thisapp_version)
+app_splashGUI.Show("w300 h90 Center")
 ; --- End Splash Screen ---
 
 /*
