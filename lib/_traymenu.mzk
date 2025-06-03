@@ -7,7 +7,7 @@ tray_icon_normal := ".\media\icons\mizu-leaf.ico"
 tray_icon_pause_all := ".\media\icons\sl-pause.ico"
 tray_icon_pause_hotkeys := ".\media\icons\sl-pause.ico"
 tray_icon_pause_hotstrings := ".\media\icons\sl-pause-hs.ico"
-tray_icon_suspend := ".\media\icons\sl-suspend.ico"
+tray_icon_suspend := ".\media\icons\sl-suspended.ico"
 traymenu_icon_checked := ".\media\icons\checked.ico"
 traymenu_icon_unchecked := ".\media\icons\unchecked.ico"
 
@@ -161,7 +161,7 @@ ToggleAuxHotkeys(*) {
         IndicateToggle("Auxillary HotKeys", "hotstrings", true, true, true)
         trayitem_toggle_hkeys_ico := traymenu_icon_checked
     } else {
-        IndicateToggle("Auxillary HotKyes", "hotstrings", false, true, true)
+        IndicateToggle("Auxiliary HotKeys", "hotstrings", false, true, true)
         trayitem_toggle_hkeys_ico := traymenu_icon_unchecked
     }
 
@@ -326,3 +326,5 @@ ShowAHKSpy(*) {
 
     return
 }
+
+

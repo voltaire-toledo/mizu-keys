@@ -152,13 +152,28 @@ EndScript(*)
 }
 ; CapsLock & p:: Send "^+x"
 
-CapsLock & F3:: F23
-CapsLock & F4:: F24
-CapsLock & F5:: F15
-CapsLock & F6:: F16
-CapsLock & F7:: F17
-CapsLock & F8:: F18
-CapsLock & F9:: F19
-CapsLock & F10:: F20
-CapsLock & F11:: F21
-CapsLock & F12:: F22
+CapsLock & F3::F23
+CapsLock & F4::F24
+CapsLock & F5::F15
+CapsLock & F6::F16
+CapsLock & F7::F17
+CapsLock & F8::F18
+CapsLock & F9::F19
+CapsLock & F10::F20
+CapsLock & F11::F21
+CapsLock & F12::F22
+
+; #SuspendExempt
+;   ^!s:: Suspend  ; Ctrl+Alt+S
+; #SuspendExempt False
+
+/* ╭───────────────------------╮
+   │ Dynamic Tray Menu updates │  
+   ╰------------───────────────╯ */
+; #HotIf !WinActive("ahk_exe vmware.exe") or !WinActive("ahk_class VMUIFrame")
+;   TraySetIcon tray_icon_normal
+; #HotIf
+
+; #HotIf WinActive("ahk_exe vmware.exe") and WinActive("ahk_class VMUIFrame")
+;   TraySetIcon tray_icon_suspend
+; #HotIf

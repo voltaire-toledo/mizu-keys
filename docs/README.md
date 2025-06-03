@@ -8,10 +8,10 @@ This is the documentation for the Mizu Keys project. Mizu Keys is a project that
 This project is dedicated to removing friction from the process of achieving focus and flow. We believe that everyone can benefit from the right tools and strategies, and that we can all learn to adapt and flow like water.
 > The Mizu Team is committed to creating a toolkit that is inclusive of all individuals, regardless of their neurodivergent status. We believe that everyone can benefit from the right tools and strategies, and that we can all learn to adapt and flow like water.
 
-
 ## [Introduction](#introduction)
 
 ## Features
+
 [image of hotkeys]
 
 ## ⌨️ Hotkeys & Shortcuts
@@ -74,22 +74,20 @@ Want to add your own? Just drop a script in [lib](http://_vscodecontentref_/2) a
 - Full Documentation & Hotkey List
 - Features
 - Coming Soon:  
-  - **Time Reminders**: Stay on track, beat time blindness  
-  - **Focused Alerts**: Never miss an important notification  
-  - **Focus Timer**: Customizable, non-intrusive focus sessions
 
 ---
 
-### Hotsrings
-
-
-
+### Hotstrings
 
 ## Coming Soon: 
 
-### Time Reminders
+- **Cukoo Alerts**: Stay on track, beat time blindness  
+- **Focused Alerts**: Never miss an important notification  
+- **Focus Timer**: Customizable, non-intrusive focus sessions
 
-Many of us suffer from Time Blindness, which is a common symptom of ADHD. Time blindness is the inability to judge the passage of time. This can be a major source of stress and anxiety for many people. The Time Reminders feature is designed to help you stay on track and manage your time more effectively. You can set up reminders to alert you when a certain amount of time has passed. This can help you stay focused and on task, and prevent you from getting lost in time.
+### Cukoo Alerts: Audible Hourly Reminders
+
+Many of us suffer from Time Blindness, which is a common symptom of ADHD. Time blindness is the inability to judge the passage of time. This can be a major source of stress and anxiety for many people. The Cukoo Alerts feature is designed to help you stay on track and manage your time more effectively. You can set up reminders to alert you when a certain amount of time has passed. This can help you stay focused and on task, and prevent you from getting lost in time.
 
 ### Focused Alerts
 
