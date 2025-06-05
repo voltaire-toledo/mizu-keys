@@ -22,7 +22,7 @@ Check out the [full list of hotkeys and](docs/README.md#hotkeys) and [features](
 ## 🛠️ Quick Install (The Magic Way)
 
 **No downloads, no fuss!**  
-Just open PowerShell as Administrator and run this single command:
+Just open PowerShell and run this single command. It doesn't even have to open it as an Administrative prompt. All will be going into your profile's local Appdata/Mizu-Keys directory:
 
 ```powershell
 iex "& { $(irm 'https://raw.githubusercontent.com/voltaire-toledo/mizu-keys/main/start-mizukeys.ps1') }"
