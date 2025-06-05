@@ -140,7 +140,7 @@ function Install-FromUrl {
         Invoke-WebRequest -Uri $RepoZipUrl -OutFile $RepoZipPath -ErrorAction Stop
         if (Test-Path $TempExtractPath) { Remove-Item $TempExtractPath -Recurse -Force }
         Expand-Archive -Path $RepoZipPath -DestinationPath $TempExtractPath -Force
-        $SourceFolder = Join-Path $TempExtractPath "mizu-keys-main\mizu-keys"
+        $SourceFolder = Join-Path $TempExtractPath "mizu-keys-main"
         Copy-Item -Path (Join-Path $SourceFolder '*') -Destination $InstallDir -Recurse -Force
         Remove-Item $RepoZipPath -Force
         Remove-Item $TempExtractPath -Recurse -Force
