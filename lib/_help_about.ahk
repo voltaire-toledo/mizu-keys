@@ -22,18 +22,39 @@ ShowHelpAbout(*) {
   dlgHeight := 540
 
   ; If dialog exists and is visible, bring it to front and return
-  if IsObject(aboutDlg)  {
-    aboutDlg.Show("w" dlgWidth " h" dlgHeight)
+ try {
+    ; aboutDlg.Show("w" dlgWidth " h" dlgHeight)
+    aboutDlg.Restore()
     return
+  } catch Any {
+    ; If dialog does not exist, create it
+    aboutDlg := ShowAboutDialog()
+    aboutDlg.Show("w" dlgWidth " h" dlgHeight)
   }
-  aboutDlg := ShowAboutDialog()
 
-  aboutDlg.Show("w" dlgWidth " h" dlgHeight)
   aboutDlg.OnEvent("Escape", (*) => aboutDlg.Destroy())
   aboutDlg.OnEvent("Close", (*) => aboutDlg.Destroy())
 }
 
 ShowAboutDialog(*) {
+  ; Detect the active private working memory usage of this process
+  pid := DllCall("GetCurrentProcessId")
+  ; Open process with query info rights
+  hProcess := DllCall("OpenProcess", "UInt", 0x1000, "Int", false, "UInt", pid, "Ptr")
+  if hProcess {
+    PROCESS_MEMORY_COUNTERS := Buffer(40, 0)
+    NumPut("UInt", 40, PROCESS_MEMORY_COUNTERS, 0) ; cb
+    if DllCall("psapi\GetProcessMemoryInfo", "Ptr", hProcess, "Ptr", PROCESS_MEMORY_COUNTERS, "UInt", 40) {
+      privateUsage := NumGet(PROCESS_MEMORY_COUNTERS, 16, "UPtr") ; WorkingSetSize is Offset 16
+      memMB := Round(privateUsage / 1024, 2)
+    } else {
+      memMB := "?"
+    }
+    DllCall("CloseHandle", "Ptr", hProcess)
+  } else {
+    memMB := "?"
+  }
+
   ; Dialog Construction
   aboutDlg := Gui()
   aboutDlg.SetFont("q5 s10", "Segoe UI")
@@ -64,7 +85,8 @@ ShowAboutDialog(*) {
   aboutDlg.SetFont("Bold s20", "Segoe UI")
   aboutDlg.Add("Text", "x72 y80 w470 h50", "Mizu Keys - Procutivity Shortcuts")
   aboutDlg.SetFont("q5 s10", "Segoe UI")
-  aboutDlg.Add("Text", "x72 y120 w600 h23", "Version: " thisapp_version)
+  aboutDlg.Add("Text", "x72 y120 w300 h23", "Version: " thisapp_version)
+  aboutDlg.Add("Text", "x372 y120 w300 h23", "Memory Usage: " memMB " KB")
   aboutDlg.Add("Text", "x72 y140 w600 h23", "Licensed under the MIT License")
 
   ; Credit Section and Links to other resources
