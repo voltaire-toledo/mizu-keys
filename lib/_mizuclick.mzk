@@ -142,7 +142,7 @@ ModalMsg(message_string := "No Action Assigned", app_in_use := "No App Defined",
   app_msolk_new := "📬 NEW Outlook"
   F13:: Send "^q"                                       ; Mark as Read
   F14:: {
-    if WinActive("Calendar -") {
+    if WinActive(,"Calendar -") {
       Send "^!{Left}"                                   ; If in Calendar view - Previous week (This was changed from Alt+Up to Ctrl+Alt+Left)
     } else {
       Send "^,"                                         ; If in Mail view - Previous Message
@@ -150,7 +150,7 @@ ModalMsg(message_string := "No Action Assigned", app_in_use := "No App Defined",
   }
   F15:: ModalMsg "", app_msolk_new
   F16:: {
-    if WinActive("Calendar -") {
+    if WinActive(,"Calendar -") {
       Send "^!{Right}"                                  ; If in Calendar view - Next week (This was changed from Alt+Down to Ctrl+Alt+Right)
     } else {
       Send "^."                                         ; If in Mail view - Next Message
