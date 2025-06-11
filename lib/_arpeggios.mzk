@@ -11,7 +11,7 @@
   │  [P] POWERTOYS      Shortcuts to PowerToys utils        │
   │  [C] CLIP UTILs     Cliboard Utilities                  │
   │  [U] UTILITIES      Utilities                           │
-  ╰─────────────────────────────────────────────────────────╯*/
+╰─────────────────────────────────────────────────────────╯*/
 ; ╭─────────────────────────────────╮
 ; │  Helper Function: KeyWaitAny()  │
 ; ╰─────────────────────────────────╯
@@ -24,7 +24,7 @@ KeyWaitAny(*)
   ; ih.KeyOpt("{All}", "E")  ; End
   ih.Start()
   ih.Wait()
-  
+
   ; if (ih.EndReason = "Max")
   ;       msg := 'You entered "{1}", which is the maximum length of text. (Endkey: {2})'
   ;   else if (ih.EndReason = "Timeout")
@@ -47,17 +47,17 @@ KeyWaitAny(*)
 ; ╰────────────────────────────────────────────────╯
 SplashGUI(message, timeout) {
   WiseGui("MizuKeySplash"
-  , "Margins:       3,3,0,4"
-  ; , "Theme:,,," . LoadPicture(A_AhkPath, "Icon1", &ImageType)
-  , "Theme:,,,"  LoadPicture(app_ico, "Icon1", &ImageType)
-  , "FontMain:     S14, Arial"
-  , "MainText:     " message
-  ; , "FontSub:      S14, Consolas"
-  ; , "SubText:" . A_AhkVersion
-  , "SubAlign:     +1"
-  ; , "Show:         Fade@400ms"
-  , "Hide:         Fade@1000ms"
-  , "Timer:        2000"
+    , "Margins:       3,3,0,4"
+    ; , "Theme:,,," . LoadPicture(A_AhkPath, "Icon1", &ImageType)
+    , "Theme:,,," LoadPicture(app_ico, "Icon1", &ImageType)
+    , "FontMain:     S14, Arial"
+    , "MainText:     " message
+    ; , "FontSub:      S14, Consolas"
+    ; , "SubText:" . A_AhkVersion
+    , "SubAlign:     +1"
+    ; , "Show:         Fade@400ms"
+    , "Hide:         Fade@1000ms"
+    , "Timer:        2000"
   )
 }
 
@@ -81,7 +81,8 @@ SplashGUI(message, timeout) {
 CapsLock & o::
 {
   KeyWait "CapsLock"
-  
+  OptionWindow := "AppModeOptions"
+
   AppModeOptionsString := (
     "[!] Windows Terminal (Admin)`n"
     "[C] VS Code`n"
@@ -94,50 +95,57 @@ CapsLock & o::
     "[X] Excel"
   )
   ; Display the options for the user
-  WiseGui("AppModeOptions"
-  , "Margins:       3,3,0,4"
-  , "Theme:,,,"  LoadPicture(app_ico, "Icon1", &ImageType)
-  , "FontMain:     S12 Bold, Arial"
-  , "MainText:     Press a key to start an app:"
-  , "MainAlign:    0"
-  , "FontSub:      S12, Cascadia Mono"
-  , "SubText:    " AppModeOptionsString
-  , "SubAlign:     -1"
-  , "Timer:        3500"
+  WiseGui(OptionWindow
+    , "Margins:       3,3,0,4"
+    , "Theme:,,," LoadPicture(app_ico, "Icon1", &ImageType)
+    , "FontMain:     S12 Bold, Arial"
+    , "MainText:     Press a key to start an app:"
+    , "MainAlign:    0"
+    , "FontSub:      S11 Norm, Segoe UI"
+    , "SubText:    " AppModeOptionsString
+    , "SubAlign:     -1"
+    , "Timer:        3500"
   )
 
   retKeyHook := KeyWaitAny()
-  ; WiseGui("AppModeOptions") ; Kill the splash screen
 
   If (retKeyHook = "c") {
-      SplashGUI("Starting VS Code...", 2000)
-      Run "code.cmd"
+    WiseGui(OptionWindow)
+    SplashGUI("Starting VS Code...", 2000)
+    Run "code.cmd"
   }
   Else If (retKeyHook = "e") {
+    WiseGui(OptionWindow)
     SplashGUI("Starting Epic Pen...", 2000)
     Run EnvGet("ProgramFiles(x86)") "\Epic Pen\EpicPen.exe"
   }
   Else If (retKeyHook = "n") {
+    WiseGui(OptionWindow)
     SplashGUI("Starting Notion...", 2000)
     LaunchNotion()
   }
   Else If (retKeyHook = "o") {
+    WiseGui(OptionWindow)
     SplashGUI("Starting MS Outlook...", 2000)
     Send "^!+#o"
   }
   Else If (retKeyHook = "p") {
+    WiseGui(OptionWindow)
     SplashGUI("Starting MS PowerPoint...", 2000)
     Send "^!+#p"
   }
   Else If (retKeyHook = "w") {
-      SplashGUI("Starting MS Word...", 2000)
-      Send "^!+#w"
+    WiseGui(OptionWindow)
+    SplashGUI("Starting MS Word...", 2000)
+    Send "^!+#w"
   }
   Else If (retKeyHook = "x") {
+    WiseGui(OptionWindow)
     SplashGUI("Starting MS Excel...", 2000)
     Send "^!+#x"
   }
   Else If (retKeyHook = "t") {
+    WiseGui(OptionWindow)
     SplashGUI("Starting Terminal...", 2000)
     LaunchTerminal()
   }
@@ -147,17 +155,18 @@ CapsLock & o::
   }
   Else {
     MsgBox("Invalid key pressed: " retKeyHook)
+    WiseGui(OptionWindow)
     ;Send "O" ; This is to respond to [LShift}+[o]; otherwise, nothing will be sent
   }
 }
 
 ; ╭──────────────────────────────────────────╮
-; │  [CapsLock]+[C]. Clipboard Utilities          │
+; │  [CapsLock]+[C]. Clipboard Utilities     │
 ; ├──────────────────────────────────────────┤
-; │  [c] Open selected into Google                     |
-; │  [d] Open selected into ChatGPT                       │
-; │  [g] Open selected into NotebookLM                          │
-; |  [i] Open selected into Google AI Studio                          │
+; │  [c] Open selected into Google           |
+; │  [d] Open selected into ChatGPT          │
+; │  [g] Open selected into NotebookLM       │
+; |  [i] Open selected into Google AI Studio │
 ; |  [p] portal.azure.com                    │
 ; |  [y] youtube.com                         │
 ; ├──────────────────────────────────────────┤
@@ -221,8 +230,6 @@ CapsLock & o::
 ;     }
 
 
-
-
 ; ╭──────────────────────────────────────────╮
 ; │  [CapsLock]+[B]. OPEN Web Sites          │
 ; ├──────────────────────────────────────────┤
@@ -238,4 +245,3 @@ CapsLock & o::
 ; │  [?]                                     │
 ; │  [?]                                     │
 ; ╰──────────────────────────────────────────╯
-

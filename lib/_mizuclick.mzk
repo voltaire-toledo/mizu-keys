@@ -1,6 +1,4 @@
 #Requires AutoHotkey v2.0
-
-
 ; ╭═════════════════════════════════════─╮
 ; │ Mouse-related macros and automations │
 ; ╰══════════════════════════════════════╯
@@ -9,9 +7,7 @@
 ; ╭─────────────────────────────────────────────────────────────╮
 ; │  Helper Function: Wrapper for MsgBox for undefined HotClix  │
 ; ╰─────────────────────────────────────────────────────────────╯
-ModalMsg(message_string := "No Action Assigned", app_in_use := "No App Defined", timeout_in_seconds := 3)
-
-{
+ModalMsg(message_string := "No Action Assigned", app_in_use := "No App Defined", timeout_in_seconds := 3) {
   ; Dictionary for the hotkeys
   Switch A_ThisHotkey
   {
@@ -24,9 +20,9 @@ ModalMsg(message_string := "No Action Assigned", app_in_use := "No App Defined",
     case "F19": trigger_key := "⌨️  [F19] `n🖱️  [Top_Back]          `n#️⃣  [Num_7]"
     case "F20": trigger_key := "⌨️  [F20] `n🖱️  [G + Top_Back]      `n#️⃣  [Num_###?]"
     case "F21": trigger_key := "⌨️  [F21] `n🖱️  [G + Side_Forward]  `n#️⃣  [Num_4]"
-    case "F22": trigger_key := "⌨️  [F22] `n🖱️  [G + OnBoard_Cycle] `n#️⃣  [Num_2]" 
+    case "F22": trigger_key := "⌨️  [F22] `n🖱️  [G + OnBoard_Cycle] `n#️⃣  [Num_2]"
     case "F23": trigger_key := "⌨️  [F23] `n🖱️  [G + Btn_Right]     `n#️⃣  [Num_9]"
-    case "F24": trigger_key := "⌨️  [F24] `n🖱️  [G + Side_Back]     `n#️⃣  [Num_1]" 
+    case "F24": trigger_key := "⌨️  [F24] `n🖱️  [G + Side_Back]     `n#️⃣  [Num_1]"
   }
 
   if message_string = ""
@@ -98,9 +94,9 @@ ModalMsg(message_string := "No Action Assigned", app_in_use := "No App Defined",
   #HotIf WinActive("ahk_exe Code.exe")
   app_vscode := "💻 VS Code"
   F13:: Click
-  F14:: Send "^["
+  F14:: Send "^["                         ; Increase Indent
   F15:: ModalMsg "", app_vscode
-  F16:: Send "^]"
+  F16:: Send "^]"                         ; Decrease Indent
   F17:: ModalMsg "", app_vscode
   F18:: ModalMsg "", app_vscode
   F19:: ModalMsg "", app_vscode
@@ -108,8 +104,6 @@ ModalMsg(message_string := "No Action Assigned", app_in_use := "No App Defined",
   F21:: ModalMsg "", app_vscode
   F22:: ModalMsg "", app_vscode
   F23:: ModalMsg "", app_vscode
-  ; ^WheelRight:: Send "^{]}"             ; Speed up the playback
-  ; ^WheelLeft:: Send "^{[}"              ; Slow down the playback
   #HotIf
 
   /*
@@ -148,21 +142,21 @@ ModalMsg(message_string := "No Action Assigned", app_in_use := "No App Defined",
   app_msolk_new := "📬 NEW Outlook"
   F13:: Send "^q"                                       ; Mark as Read
   F14:: {
-    if WinActive("Calendar -") {
-      Send "!{Up}"                                    ; If in Calendar view - Previous week 
+    if WinActive(,"Calendar -") {
+      Send "^!{Left}"                                   ; If in Calendar view - Previous week (This was changed from Alt+Up to Ctrl+Alt+Left)
     } else {
-      Send "^,"                                       ; If in Mail view - Previous Message
+      Send "^,"                                         ; If in Mail view - Previous Message
     }
   }
   F15:: ModalMsg "", app_msolk_new
   F16:: {
-    if WinActive("Calendar -") {
-      Send "!{Down}"                                  ; If in Calendar view - Next week
+    if WinActive(,"Calendar -") {
+      Send "^!{Right}"                                  ; If in Calendar view - Next week (This was changed from Alt+Down to Ctrl+Alt+Right)
     } else {
-      Send "^."                                       ; If in Mail view - Next Message
+      Send "^."                                         ; If in Mail view - Next Message
     }
   }
-  F18:: Send "^t"                                       ; Post a reply                 
+  F18:: Send "^t"                                       ; Post a reply
   F17:: Send "^{1}"                                     ; Switch to Mail view
   F19:: Send "^{2}"                                     ; Switch to Calendar view
   F21:: ModalMsg "", app_msolk_new
@@ -181,7 +175,7 @@ ModalMsg(message_string := "No Action Assigned", app_in_use := "No App Defined",
   F13:: Send "^q"                                       ; Mark as Read
   F14:: {
     if WinActive("Calendar -") {
-      Send "!{Up}"                                    ; If in Calendar view - Previous week 
+      Send "!{Up}"                                    ; If in Calendar view - Previous week
     } else {
       Send "^,"                                       ; If in Mail view - Previous Message
     }
@@ -215,11 +209,11 @@ ModalMsg(message_string := "No Action Assigned", app_in_use := "No App Defined",
   F15:: ModalMsg "", app_msexcel
   F16:: Send "^{PgDn}"                                 ; Next Worksheet
   F18:: {
-          Send "^!{v}"                                 ; Paste the clipboard's format only
-          Send "{t}"
-          Send "{Enter}"
-        }
-    F17:: Send "^+{v}"                                    ; Paste as plain textt
+    Send "^!{v}"                                 ; Paste the clipboard's format only
+    Send "{t}"
+    Send "{Enter}"
+  }
+  F17:: Send "^+{v}"                                    ; Paste as plain textt
   F19:: Send "^{c}"                                     ; Copy
   F20:: ModalMsg "", app_msexcel
   F21:: ModalMsg "", app_msexcel
@@ -241,10 +235,10 @@ ModalMsg(message_string := "No Action Assigned", app_in_use := "No App Defined",
   F15:: ModalMsg "", app_msteams
   F16:: Send "^{PgDn}"                                 ; Next Worksheet
   F18:: {
-          Send "^!{v}"                                 ; Paste the clipboard's format only
-          Send "{t}"
-          Send "{Enter}"
-        }
+    Send "^!{v}"                                 ; Paste the clipboard's format only
+    Send "{t}"
+    Send "{Enter}"
+  }
   F17:: Send "^{2}"                                     ; Chat View
   F19:: Send "^{4}"                                     ; Calendar View
   F20:: Send "^{3}"                                     ; Teams View
@@ -284,16 +278,16 @@ ModalMsg(message_string := "No Action Assigned", app_in_use := "No App Defined",
   │ EVERYTHING ELSE: Default Mouse Button Hotkeys  │
   ╰════════════════════════════════════════════════╯ */
   F13:: Click
-  F14:: Send "^+{Tab}"                                          ; Ctrl+Shift+Tab 
+  F14:: Send "^+{Tab}"                                  ; Ctrl+Shift+Tab
   F15:: ModalMsg "", ""
-  F16:: Send "^{Tab}"                                           ; Ctrl+Tab 
-  F17:: Send "#{Tab}"                                           ; Win+Tab 
+  F16:: Send "^{Tab}"                                   ; Ctrl+Tab
+  F17:: Send "#{Tab}"                                   ; Win+Tab
   F18:: ModalMsg "", ""
   F19:: ModalMsg "", ""
   F20:: ModalMsg "", ""
   F21:: ModalMsg "", ""
   F22:: ModalMsg "", ""
-  F23:: Send "^{w}"                                             ; Ctrl+W 
+  F23:: Send "^{w}"                                     ; Ctrl+W
   F24:: ModalMsg "", ""
 
   +F19:: ModalMsg "No Definition Assigned", "Default"
