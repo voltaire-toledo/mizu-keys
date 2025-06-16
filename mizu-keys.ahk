@@ -18,6 +18,8 @@ InstallKeybdHook  ; Install the keyboard hook to capture key events
 │ GLOBAL SCOPE VARIABLES │
 ╰────────────────────────╯
 */
+global __StartTime := A_TickCount
+global __Uptime := 99999 ; Placeholder for uptime, will be updated later
 global thisapp_name := "Mizu Keys"
 global thisapp_version := "0.9.0_alpha (2024-06-01)"
 global process_theme := ""
@@ -65,7 +67,6 @@ app_splashGUI.Show("w300 h90 Center")
 │ INITIALIZATION         │
 ╰────────────────────────╯
 */
-LaunchTime := FormatTime()
 SetWorkingDir(A_ScriptDir)
 DisplayTrayMenu()
 
