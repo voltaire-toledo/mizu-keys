@@ -18,8 +18,10 @@ InstallKeybdHook  ; Install the keyboard hook to capture key events
 │ GLOBAL SCOPE VARIABLES │
 ╰────────────────────────╯
 */
+global __StartTime := A_TickCount
+global __Uptime := 99999 ; Placeholder for uptime, will be updated later
 global thisapp_name := "Mizu Keys"
-global thisapp_version := "0.9.0_alpha (2024-06-01)"
+global thisapp_version := "0.9.1_alpha (2024-06-17)"
 global process_theme := ""
 global app_ico := ".\media\icons\mizu-leaf.ico"
 global toggle_sound_file_startrun := A_Windir "\Media\Windows Unlock.wav"
@@ -53,7 +55,7 @@ app_splashGUI.Show("w300 h90 Center")
 #Include ".\lib\_hotkeys.mzk"
 #Include ".\lib\_hotstrings.mzk"
 #Include ".\lib\_alerts.mzk"
-#Include ".\lib\_mizuclick.mzk"
+#Include ".\lib\_high_fkeys.mzk"
 #include ".\lib\_arpeggios.mzk"
 #Include ".\lib\WiseGui.ahk"
 #include ".\lib\_virtual_desktops.mzk"
@@ -65,7 +67,6 @@ app_splashGUI.Show("w300 h90 Center")
 │ INITIALIZATION         │
 ╰────────────────────────╯
 */
-LaunchTime := FormatTime()
 SetWorkingDir(A_ScriptDir)
 DisplayTrayMenu()
 
@@ -151,17 +152,6 @@ EndScript(*)
   Run "explorer.exe ~"
 }
 ; CapsLock & p:: Send "^+x"
-
-CapsLock & F3::F23
-CapsLock & F4::F24
-CapsLock & F5::F15
-CapsLock & F6::F16
-CapsLock & F7::F17
-CapsLock & F8::F18
-CapsLock & F9::F19
-CapsLock & F10::F20
-CapsLock & F11::F21
-CapsLock & F12::F22
 
 ; #SuspendExempt
 ;   ^!s:: Suspend  ; Ctrl+Alt+S

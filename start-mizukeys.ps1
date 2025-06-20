@@ -63,7 +63,18 @@ function Get-AutoHotkey {
   }
   Write-Output "Downloading AutoHotkey..."
   try {
-    Invoke-WebRequest -Uri $AHKZipUrl -OutFile $AHKZipPath -ErrorAction Stop
+    # Force strong TLS
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+    # Set up headers to mimic curl
+    $headers = @{
+        "User-Agent" = "curl/8.14.1"
+        "Accept"     = "*/*"
+        "Host"       = "www.autohotkey.com"
+    }
+
+    # Run the request
+    Invoke-WebRequest -Uri $AHKZipUrl -Headers $headers-OutFile $AHKZipPath -ErrorAction Stop
     Expand-Archive -Path $AHKZipPath -DestinationPath $AHKBinPath -Force
     Remove-Item -Path $AHKZipPath -Force
     Write-Output "AutoHotkey downloaded and extracted to '$AHKBinPath'."

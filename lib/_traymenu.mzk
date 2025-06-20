@@ -62,11 +62,13 @@ DisplayTrayMenu() {
 
     ; Set the Tray icon tooltip
     global Tray := A_TrayMenu ; For convenience.
+    __LoadDuration := A_TickCount - __StartTime
+    __LoadDuration := Round(__LoadDuration / 1000, 2) ; Convert to seconds and round to 2 decimal places
     IconTipString := "
     (
       Mizu Keys Shortcuts
-      Last Run: `s
-    )" LaunchTime "
+      Startup Duration: `s
+    )" __LoadDuration " ms
     (
       `nScript: `s
     )" A_ScriptFullPath
