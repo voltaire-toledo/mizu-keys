@@ -1,8 +1,17 @@
 #Requires AutoHotkey v2.0
-; ╭═════════════════════════════════════─╮
-; │ Mouse-related macros and automations │
-; ╰══════════════════════════════════════╯
-
+; ╭══════════════════════╮
+; │ Higher Function Keys │
+; ╰══════════════════════╯
+CapsLock & F3::F23
+CapsLock & F4::F24
+CapsLock & F5::F15
+CapsLock & F6::F16
+CapsLock & F7::F17
+CapsLock & F8::F18
+CapsLock & F9::F19
+CapsLock & F10::F20
+CapsLock & F11::F21
+CapsLock & F12::F22
 
 ; ╭─────────────────────────────────────────────────────────────╮
 ; │  Helper Function: Wrapper for MsgBox for undefined HotClix  │
@@ -259,7 +268,7 @@ ModalMsg(message_string := "No Action Assigned", app_in_use := "No App Defined",
   F13:: Send "^+{v}"                                    ; Ctrl+Shift+V to Paste as plain text
   F14:: Send "^+{Tab}"                                  ; Ctrl+Shift+Tab to switch to the previous tab
   F15:: {                                               ; Ctrl+Shift+U to Read Out Loud
-    SplashGUI("MS Edge: Read Out Loud...", 2000)
+    ModalMsg("MS Edge: Read Out Loud...", 2000)
     Send "^+{u}"
   }
   F16:: Send "^{Tab}"                                   ; Ctrl+Tab to switch to the next tab

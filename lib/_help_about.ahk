@@ -11,7 +11,7 @@
   TODO:
   [x] Add a link to the official documentation
   [x] Add a link to the GitHub repository
-  [x] Add credit to the third-party library developers 
+  [x] Add credit to the third-party library developers
   [x] add links to their profile and project
   [x] Credit icons8 for icons and add link to icons8
   [] Add a link to the YouTube channel that demos the features
@@ -48,7 +48,7 @@ ShowAboutDialog(*) {
     NumPut("UInt", 40, PROCESS_MEMORY_COUNTERS, 0) ; cb
     if DllCall("psapi\GetProcessMemoryInfo", "Ptr", hProcess, "Ptr", PROCESS_MEMORY_COUNTERS.Ptr, "UInt", 40) {
       ; For 32-bit AHK, PROCESS_MEMORY_COUNTERS.PrivateWorkingSetSize is at offset 32 (DWORD)
-      ; This is 
+      ; This is
       workingSetSize := NumGet(PROCESS_MEMORY_COUNTERS, 32, "UInt")
       memMB := Round(workingSetSize / 1024 / 1024, 2)
     } else {
@@ -95,7 +95,7 @@ ShowAboutDialog(*) {
   aboutDlg.Add("Picture", "x16 y80 w48 h48", A_ScriptDir "\media\icons\mizu-leaf.ico")
   aboutDlg.SetFont("c3e3d32", "Segoe UI")
   aboutDlg.SetFont("Bold s20", "Segoe UI")
-  aboutDlg.Add("Text", "x72 y80 w470 h50", "Mizu Keys - Procutivity Shortcuts")
+  aboutDlg.Add("Text", "x72 y80 w470 h50", "Mizu Keys - Productivity Shortcuts")
   aboutDlg.SetFont("q5 s10", "Segoe UI")
   aboutDlg.Add("Text", "x72 y120 w300 h23", "Version: " thisapp_version)
   aboutDlg.Add("Text", "x372 y120 w300 h23", "Private Memory Usage: " memMB " MB")
@@ -119,7 +119,7 @@ ShowAboutDialog(*) {
   ; Tab 2 - Hotkeys
   mainTab.UseTab(2)
   aboutDlg.SetFont("Bold s12", "Segoe UI")
-  aboutDlg.Add("Text", "x16 y70 w690 h26", "Core Hotkeys")
+  aboutDlg.Add("Text", "x16 y70 w690 h26", "Hotkeys")
   aboutDlg.SetFont("c000000 Norm q5 s10", "Segoe UI")
   aboutDlg.Add("Text", "x16 y95 w705 h23", "Hotkeys are synonymous to keyboard shortcuts. Go ahead and try them out!")
   ; aboutDlg.Add("Text", "x16 y120 w720 h23", "You can also add your own hotkeys in the script file, or use the auxiliary hotkeys feature to create custom hotkeys on the fly.")
@@ -152,18 +152,19 @@ ShowAboutDialog(*) {
   aboutDlg.SetFont("Bold s12", "Segoe UI")
   aboutDlg.Add("Text", "x16 y70 w690 h30", "Hotstrings")
   aboutDlg.SetFont("c000000 Norm q5 s10", "Segoe UI")
-  aboutDlg.Add("Text", "x16 y95 w705 h54", "")
-  
+  aboutDlg.Add("Text", "x16 y95 w705 h54", "Hotstrings are basically aliases or string replacements. Just type the hotsring followed by a trigger key (like [Space] or [Enter]) and it will be replaced with the corresponding text.")
+
   ; --- Radio Buttons and Dynamic ListViews ---
   ; GroupBox for visual clarity (optional)
-  aboutDlg.Add("GroupBox", "x16 y160 w705 h60", "Hotstring Groups")
+  aboutDlg.Add("GroupBox", "x16 y135 w705 h50", "Hotstring Groups")
 
   ; Radio Buttons (horizontal)
-  hs_rb_core := aboutDlg.Add("Radio", "x32 y185 w120 h23 vRadio1", "Core")
-  hs_rb_aux := aboutDlg.Add("Radio", "x172 y185 w120 h23 vRadio2", "Aux Hotstrings")
-  hs_rb_custom := aboutDlg.Add("Radio", "x312 y185 w120 h23 vRadio3", "DIY 🔨")
+  hs_rb_core := aboutDlg.Add("Radio", "x32 y155 w120 h23 vhs_rb_core", "Core")
+  hs_rb_aux := aboutDlg.Add("Radio", "x172 y155 w120 h23 vhs_rb_aux", "Aux Hotstrings")
+  hs_rb_custom := aboutDlg.Add("Radio", "x312 y155 w120 h23 vhs_rb_custom", "Custom")
 
   hs_rb_core.Value := true ; Default selection
+  aboutDlg.Add("Text", "x16 y190 w705 h54 vhs_rb_text", "The Core Hotstrings are the ones that come with " thisapp_name ".")
 
   ; ListViews for each category (stacked, only one visible at a time)
   hs_lv_core := aboutDlg.Add("ListView", "x16 y220 w705 r10 vhs_lv_core", ["Hotstring", "Replacement", "Comments"])
@@ -172,24 +173,53 @@ ShowAboutDialog(*) {
   hs_lv_core.Add(, "A1", "B1")
   hs_lv_core.Add(, "A2", "B2")
   hs_lv_core.Add(, "A3", "B3")
+  hs_lv_core.ModifyCol() ; Auto-size the first column
+  hs_lv_core.ModifyCol(2) ; Auto-size the second column
+  hs_lv_core.ModifyCol(3)
   hs_lv_core.Opt("+Redraw")
 
-  hs_lv_clip := aboutDlg.Add("ListView", "x16 y220 w705 r10 vhs_lv_clip", ["Hotstring", "Replacement", "Comments"])
-  hs_lv_clip.Add(, "X1", "Y1")
-  hs_lv_clip.Add(, "X2", "Y2")
-  hs_lv_clip.Visible := false
+  hs_lv_aux := aboutDlg.Add("ListView", "x16 y220 w705 r10 vhs_lv_aux", ["Hotstring", "Replacement", "Comments"])
+  hs_lv_aux.Opt("+Report +Sort")
+  hs_lv_aux.Opt("-Redraw")
+  hs_lv_aux.Add(, "X1", "Y1")
+  hs_lv_aux.Add(, "X2", "Y2")
+  hs_lv_aux.ModifyCol() ; Auto-size the first column
+  hs_lv_aux.ModifyCol(2) ; Auto-size the second column
+  hs_lv_aux.ModifyCol(3)
+  hs_lv_aux.Opt("+Redraw")
+  hs_lv_aux.Visible := false
+  
+  hs_lv_custom := aboutDlg.Add("ListView", "x16 y220 w705 r10 vhs_lv_custom.", ["Hotstring", "Example Replacement", "Comments"])
+  hs_lv_aux.Opt("+Report +Sort")
+  hs_lv_aux.Opt("-Redraw")
+  hs_lv_custom.Add(, "!me", "[Your Name]")
+  hs_lv_custom.Add(, "!nickname", "[Your Nickname]")
+  hs_lv_custom.Add(, "!sig", "Name`{ENTER`}Email`{ENTER`}Phone#`{ENTER`}")
+  hs_lv_custom.Add(, "!myphone", "[Your Phone Number]")
+  hs_lv_custom.Add(, "!email", "[Your E-mail address]")
+  hs_lv_custom.ModifyCol() ; Auto-size the first column
+  hs_lv_custom.ModifyCol(2) ; Auto-size the second column
+  hs_lv_custom.ModifyCol(3)
+  hs_lv_custom.Opt("+Redraw")
+  hs_lv_custom.Visible := false
 
-  hs_lv_nav := aboutDlg.Add("ListView", "x16 y220 w705 r10 vhs_lv_nav.", ["Hotstring", "Replacement", "Comments"])
-  hs_lv_nav.Add(, "F1", "B1")
-  hs_lv_nav.Add(, "F2", "B2")
-  hs_lv_nav.Visible := false
+  hs_lv_custom.Visible := false
 
   ; Handler to switch ListViews
   hs_switchListView(*) {
     hs_lv_core.Visible := hs_rb_core.Value
-    hs_lv_clip.Visible := hs_rb_aux.Value
-    hs_lv_nav.Visible := hs_rb_custom.Value
+    hs_lv_aux.Visible := hs_rb_aux.Value
+    hs_lv_custom.Visible := hs_rb_custom.Value
+    if (hs_rb_core.Value)
+      aboutDlg["hs_rb_text"].Value := "The Core Hotstrings are the ones that come with " thisapp_name "."
+    else if (hs_rb_aux.Value)
+      aboutDlg["hs_rb_text"].Value := "Aux Hotstrings include optional expansions and modifiers for advanced use."
+    else if (hs_rb_custom.Value)
+      aboutDlg["hs_rb_text"].Value := "Add your Custom Hotstrings at the end of the LIB\_HOTSTRINGS.MZK file. Here are some examples below:"
   }
+  hs_rb_core.OnEvent("Click", hs_switchListView)
+  hs_rb_aux.OnEvent("Click", hs_switchListView)
+  hs_rb_custom.OnEvent("Click", hs_switchListView)
 
   ; Tab 4 - Arpeggios
   mainTab.UseTab(4)
@@ -197,14 +227,14 @@ ShowAboutDialog(*) {
   aboutDlg.Add("Text", "x16 y70 w690 h30", "Arpeggios2")
   aboutDlg.SetFont("c000000 Norm q5 s10", "Segoe UI")
   aboutDlg.Add("Text", "x16 y95 w705 h54", "Arpeggios trigger automations, but instead of using a hotkey or hotstring, an Arpeggio is made up of a sequence of keys/hotkeys. Think of it like playing musical notes: press [Caps Lock] + [O] to set the Mood, then tap [N] and  voilà — Notion launches like you meant business!")
-  
+
   ; --- Radio Buttons and Dynamic ListViews ---
   ; GroupBox for visual clarity (optional)
   aboutDlg.Add("GroupBox", "x16 y160 w705 h60", "Mood")
 
   ; Radio Buttons (horizontal)
   a_rb_apps := aboutDlg.Add("Radio", "x32 y185 w120 h23 ", "Applications")
-  a_rb_clip := aboutDlg.Add("Radio", "x172 y185 w120 h23 ", "Selected `nText")
+  a_rb_clip := aboutDlg.Add("Radio", "x172 y185 w120 h23 ", "Selected Text")
   a_rb_nav := aboutDlg.Add("Radio", "x312 y185 w120 h23 ", "Navigation")
 
   a_rb_apps.Value := true ; Default selection
@@ -237,9 +267,8 @@ ShowAboutDialog(*) {
   a_rb_apps.OnEvent("Click", a_switchListView)
   a_rb_clip.OnEvent("Click", a_switchListView)
   a_rb_nav.OnEvent("Click", a_switchListView)
-  
-  
-  
+
+
   aboutDlg.Title := "Mizu Keys - About"
   return aboutDlg
 }
