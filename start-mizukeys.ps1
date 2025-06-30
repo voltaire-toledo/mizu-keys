@@ -74,7 +74,7 @@ function Get-AutoHotkey {
     }
 
     # Run the request
-    Invoke-WebRequest -Uri $AHKZipUrl -Headers $headers-OutFile $AHKZipPath -ErrorAction Stop
+    Invoke-WebRequest -Uri $AHKZipUrl -Headers $headers -OutFile $AHKZipPath -ErrorAction Stop
     Expand-Archive -Path $AHKZipPath -DestinationPath $AHKBinPath -Force
     Remove-Item -Path $AHKZipPath -Force
     Write-Output "AutoHotkey downloaded and extracted to '$AHKBinPath'."
