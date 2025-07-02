@@ -24,7 +24,7 @@
 ; #HotIf (WinActive("ahk_exe WindowsTerminal.exe") or WinActive("ahk_exe code.exe") or WinActive("ahk_exe notepad.exe")) and (Aux_HotStringSupport = true)
 #HotIf (Aux_HotStringSupport = true)
 {
-  #HotString SE K10
+  #HotString SE K40
   /*
   :*:##tbl-thin##::
   :*:##tbl##::{
@@ -270,9 +270,9 @@
   
   ::`!tricolon::⁝       ; 8234
   ::`!fahrenheit::℉   ; 8457
+  ::`!windows::⊞         ; 8992 Used for Windows key or Windows logo
   
-
-  ; Misspellings
+  ; Common Misspellings
 
   ; Custom Strings
   ::`!magicip::168.63.129.16

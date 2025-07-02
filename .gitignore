@@ -8,3 +8,6 @@
 # Ignore custom directory icon
 desktop.ini
 
+# Ignore the Mizu Keys custom functions
+# This file is not meant to be shared, as it contains personal customizations.
+**/mine/

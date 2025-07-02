@@ -77,7 +77,8 @@
 
     If GetKeyState("LCtrl", "P") && GetKeyState("LAlt", "P")
     {
-      LaunchTerminal()
+      LaunchWarpTerminal()
+      ; LaunchTerminal()
     }
     Else
     {

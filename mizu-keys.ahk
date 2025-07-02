@@ -51,7 +51,6 @@ app_splashGUI.Show("w300 h90 Center")
 #Include ".\lib\_apps_automations.mzk"
 #Include ".\lib\_traymenu.mzk"
 #Include ".\lib\_help_about.ahk"
-; #Include ".\lib\_about.ahk"
 #Include ".\lib\_hotkeys.mzk"
 #Include ".\lib\_hotstrings.mzk"
 #Include ".\lib\_alerts.mzk"
@@ -61,7 +60,7 @@ app_splashGUI.Show("w300 h90 Center")
 #include ".\lib\_virtual_desktops.mzk"
 ; #Include ".\lib\_time_functions.ahk"
 ; #Include ".\lib\_screen_notifications.ahk"
-
+#Include ".\mine\_custom_functions.mzk"
 /*
 ╭────────────────────────╮
 │ INITIALIZATION         │
