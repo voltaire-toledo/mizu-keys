@@ -56,6 +56,7 @@ app_splashGUI.Show("w300 h90 Center")
 #Include ".\lib\_alerts.mzk"
 #Include ".\lib\_high_fkeys.mzk"
 #include ".\lib\_arpeggios.mzk"
+#Include ".\lib\_window_mgr.mzk"
 #Include ".\lib\WiseGui.ahk"
 #include ".\lib\_virtual_desktops.mzk"
 ; #Include ".\lib\_time_functions.ahk"
@@ -112,9 +113,9 @@ EndScript(*)
 }
 
 ; [Ctrl]+[Alt]+[Win]+[S]: Toggle Aux Hotstrings
-^#!s:: {
-  ToggleAuxHotstrings()
-}
+; ^#!s:: {
+;   ToggleAuxHotstrings()
+; }
 
 ; [Ctrl]+[Alt]+[Win]+[R] to Reload this script
 ^#!r:: {

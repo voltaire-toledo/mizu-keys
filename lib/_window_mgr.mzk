@@ -1,0 +1,142 @@
+#Requires AutoHotkey v2.0
+#SingleInstance Force
+
+SqueezeAndPose(screen_percent, resize_percent := 0) {
+  ; ╭───────────────────────────────────────────────────────────────────────────────────────────╮
+  ; │ SqueezeAndPose: Resize and center the active window to a percentage of the screen size.   │
+  ; │ screen_percent: Percentage of the screen size to resize the window to (e.g., 50 for 50%). │
+  ; │ resize_percent: Percentage of the screen size to resize the window by (e.g., -5 for 5%    │
+  ; │                 smaller, 5 for 5% larger).                                                │
+  ; │ If both are zero, do nothing.                                                             │
+  ; ╰───────────────────────────────────────────────────────────────────────────────────────────╯
+  ; Validate input
+  if (screen_percent = 0 && resize_percent = 0)
+    return
+
+  ; Get the total Monitor Work Area
+  totalWorkAreawidth := SysGet(78) ; Total Work Area Width
+  totalWorkAreaHeight := SysGet(79) ; Total Work Area Height
+  totalWorkArea := SysGet(80) ; Total Work Area (as an object)
+
+  ; Get the active window handle
+  winX := 0, winY := 0, winW := 0, winH := 0
+  active_hwnd := WinGetID("A")
+  if !active_hwnd {
+    MsgBox("No active window handle found!")
+    return
+  }
+  WinGetPos(&winX, &winY, &winW, &winH, active_hwnd)
+
+  ; get the center coordinates of the active window
+  center_x := winX + Floor(winW / 2)
+  center_y := winY + Floor(winH / 2)
+
+  ; Get the active window's position, size and monitor information
+  MonitorCount := MonitorGetCount()
+  MonitorPrimary := MonitorGetPrimary()
+
+  ; Find which monitor the window is on and get its work area
+  MonitorGetWorkAreaNum := 1
+  Loop MonitorCount
+  {
+    MonitorGet(A_Index, &L, &T, &R, &B)
+    if (center_x >= L && center_x <= R && center_y >= T && center_y <= B) {
+      MonitorGetWorkAreaNum := A_Index
+      break
+    }
+  }
+  
+  MonitorGetWorkArea(MonitorGetWorkAreaNum, &screenX, &screenY, &screenW, &screenH)
+  screenW := screenW - screenX
+  screenH := screenH - screenY
+
+  if (screen_percent > 0) {
+    ; Resize to screen_percent% of monitor, then apply resize_percent
+    percent := (screen_percent + resize_percent) / 100
+    newW := Round(screenW * percent)
+    newH := Round(screenH * percent)
+  } else {
+    ; Keep window size, but adjust by resize_percent of monitor
+    newW := winW + Round(screenW * (resize_percent / 100))
+    newH := winH + Round(screenH * (resize_percent / 100))
+  }
+
+  newX := screenX + Floor((screenW - newW) / 2)
+  newY := screenY + Floor((screenH - newH) / 2)
+
+  ; MsgBox("Handle: " . active_hwnd . " Title: " . WinGetTitle(active_hwnd))
+  if (WinGetMinMax(active_hwnd) = 1)  ; 1 = Maximized
+    WinRestore(active_hwnd)
+  WinMove(newX, newY, newW, newH, active_hwnd)
+}
+
+ResizeWindowBorders(leftDelta := 0, bottomDelta := 0, topDelta := 0, rightDelta := 0) {
+  ; ╭──╮
+  ; │  │
+  ; ╰──╯
+  ; Get the active window handle and its current position/size
+  winX := 0, winY := 0, winW := 0, winH := 0
+  active_hwnd := WinGetID("A")
+  if !active_hwnd {
+    MsgBox("No active window handle found!")
+    return
+  }
+  WinGetPos(&winX, &winY, &winW, &winH, active_hwnd)
+
+  ; Calculate new position and size
+  newX := winX - leftDelta
+  newY := winY - topDelta
+  newW := winW + leftDelta + rightDelta
+  newH := winH + topDelta + bottomDelta
+
+  ; Prevent negative width/height
+  if (newW < 1)
+    newW := 1
+  if (newH < 1)
+    newH := 1
+
+  WinMove(newX, newY, newW, newH, active_hwnd)
+}
+
+
+; ╭──╮
+; │  │
+; ╰──╯
+CapsLock & \:: {
+  SqueezeAndPose(70) ; Resize to 70% of the screen size
+  return
+}
+
+CapsLock & [:: {
+  SqueezeAndPose(0, -5) ; Resize to 80% of the screen size
+  return
+}
+
+CapsLock & ]:: {
+  SqueezeAndPose(0, 5) ; Resize to 80% of the screen size
+  return
+}
+
+^#!Left:: {
+  ResizeWindowBorders(50, 0, 0, 0) ; Resize left border by 5 pixels
+  return
+}
+^#!Right:: {
+  ResizeWindowBorders(0, 0, 0, 50) ; Resize right border by 5 pixels
+  return
+}
+^#!Up:: {
+  ResizeWindowBorders(0, 0, 50, 0) ; Resize top border by 5 pixels
+  return
+}
+^#!Down:: {
+  ResizeWindowBorders(0, 50, 0, 0) ; Resize bottom border by 5 pixels
+  return
+}
+CapsLock & Up:: {
+  if GetKeyState("LShift", "P") {
+    ResizeWindowBorders(0, 25, 25, 0) ; Resize top border by 50 pixels
+    return
+  }
+  return
+}
