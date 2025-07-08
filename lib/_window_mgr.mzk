@@ -45,7 +45,7 @@ SqueezeAndPose(screen_percent, resize_percent := 0) {
       break
     }
   }
-  
+
   MonitorGetWorkArea(MonitorGetWorkAreaNum, &screenX, &screenY, &screenW, &screenH)
   screenW := screenW - screenX
   screenH := screenH - screenY
@@ -65,15 +65,19 @@ SqueezeAndPose(screen_percent, resize_percent := 0) {
   newY := screenY + Floor((screenH - newH) / 2)
 
   ; MsgBox("Handle: " . active_hwnd . " Title: " . WinGetTitle(active_hwnd))
-  if (WinGetMinMax(active_hwnd) = 1)  ; 1 = Maximized
-    WinRestore(active_hwnd)
+  ; if (WinGetMinMax(active_hwnd) = 1)  ; 1 = Maximized
+  WinRestore(active_hwnd) ; WinrRestore tends to keep the window animation smooth
   WinMove(newX, newY, newW, newH, active_hwnd)
 }
 
 ResizeWindowBorders(leftDelta := 0, bottomDelta := 0, topDelta := 0, rightDelta := 0) {
-  ; ╭──╮
-  ; │  │
-  ; ╰──╯
+  ; ╭────────────────────────────────────────────────────────────────────────────────────────────────╮
+  ; │ ResizeWindowBorders: Resize the active window by moving its borders in specified directions.   │
+  ; │   leftDelta: Pixels to move the left border (negative to decrease width).                      │
+  ; │   bottomDelta: Pixels to move the bottom border (negative to decrease height).                 │
+  ; │   topDelta: Pixels to move the top border (negative to decrease height).                       │
+  ; │   rightDelta: Pixels to move the right border (negative to decrease width).                    │
+  ; ╰────────────────────────────────────────────────────────────────────────────────────────────────╯
   ; Get the active window handle and its current position/size
   winX := 0, winY := 0, winW := 0, winH := 0
   active_hwnd := WinGetID("A")
@@ -91,52 +95,74 @@ ResizeWindowBorders(leftDelta := 0, bottomDelta := 0, topDelta := 0, rightDelta 
 
   ; Prevent negative width/height
   if (newW < 1)
-    newW := 1
+    newW := 100
   if (newH < 1)
-    newH := 1
+    newH := 100
 
+  WinRestore(active_hwnd) ; WinrRestore tends to keep the window animation smooth
   WinMove(newX, newY, newW, newH, active_hwnd)
 }
 
 
-; ╭──╮
-; │  │
-; ╰──╯
-CapsLock & \:: {
-  SqueezeAndPose(70) ; Resize to 70% of the screen size
+; ╭────────────────────────────────────────────────╮
+; │ Shortcuts for resizing and positioning windows │
+; ╰────────────────────────────────────────────────╯
+Capslock & /:: { ; [CapsLock]+[/]: Resize to 70% of the screen size
+  SqueezeAndPose(70)
+  return
+}
+CapsLock & [:: { ; [CapsLock]+[Left Square Bracket]: Decrease size by 5% of the screen size
+  SqueezeAndPose(0, -5)
+  return
+}
+CapsLock & ]:: { ; [CapsLock]+[Right Square Bracket]: Increase size by 5% of the screen size
+  SqueezeAndPose(0, 5)
   return
 }
 
-CapsLock & [:: {
-  SqueezeAndPose(0, -5) ; Resize to 80% of the screen size
-  return
-}
-
-CapsLock & ]:: {
-  SqueezeAndPose(0, 5) ; Resize to 80% of the screen size
-  return
-}
-
-^#!Left:: {
-  ResizeWindowBorders(50, 0, 0, 0) ; Resize left border by 5 pixels
-  return
-}
-^#!Right:: {
-  ResizeWindowBorders(0, 0, 0, 50) ; Resize right border by 5 pixels
-  return
-}
-^#!Up:: {
-  ResizeWindowBorders(0, 0, 50, 0) ; Resize top border by 5 pixels
-  return
-}
-^#!Down:: {
-  ResizeWindowBorders(0, 50, 0, 0) ; Resize bottom border by 5 pixels
-  return
-}
+; ╭───────────────────────────────────────────────────────────────────────────────────────────────────╮
+; │ Shortcuts for resizing window dimensions by 25 pixels:                                            │
+; │ - [CapsLock]+[LShift]+[← ↑ ↓ →]: Decrease window dimensions by moving border in the key direction │
+; │ - [CapsLock]+[LCtrl]+[← ↑ ↓ →]: Resize window vertically or horizontally                          │
+; │ - [CapsLock]+[← ↑ ↓ →]: Increase window dimensions by moving border in the key direction          │
+; ╰───────────────────────────────────────────────────────────────────────────────────────────────────╯
 CapsLock & Up:: {
   if GetKeyState("LShift", "P") {
-    ResizeWindowBorders(0, 25, 25, 0) ; Resize top border by 50 pixels
-    return
+    ResizeWindowBorders(0, 0, -25, 0)   ; [CapsLock]+[LShift]+[↑]: Decrease top border by 25 pixels
+  } else if GetKeyState("LCtrl", "P") {
+    ResizeWindowBorders(0, 25, 25, 0)   ; [CapsLock]+[LCtrl]+[↑]: Increase top and bottom border by 25 pixels
+  } else {
+    ResizeWindowBorders(0, 0, 25, 0)    ; [CapsLock]+[↑]: Increase top border by 25 pixels
+  }
+  return
+}
+CapsLock & Down:: {
+  if GetKeyState("LShift", "P") {
+    ResizeWindowBorders(0, -25, 0, 0)     ; [CapsLock]+[LShift]+[↓]: Decrease bottom border by 25 pixels
+  } else if GetKeyState("LCtrl", "P") {
+    ResizeWindowBorders(0, -25, -25, 0)   ; [CapsLock]+[LCtrl]+[↓]: Decrease top and bottom border by 25 pixels
+  } else {
+    ResizeWindowBorders(0, 25, 0, 0)      ; [CapsLock]+[↓]: Increase bottom border by 25 pixels
+  }
+  return
+}
+CapsLock & Right:: {
+  if GetKeyState("LShift", "P") {
+    ResizeWindowBorders(0, 0, 0, -25)     ; [CapsLock]+[LShift]+[→]: Decrease right border by 25 pixels
+  } else if GetKeyState("LCtrl", "P") {
+    ResizeWindowBorders(25, 0, 0, 25)     ; [CapsLock]+[LCtrl]+[→]: Increase left and right border by 25 pixels
+  } else {
+    ResizeWindowBorders(0, 0, 0, 25)      ; [CapsLock]+[→]: Increase right border by 25 pixels
+  }
+  return
+}
+CapsLock & Left:: { 
+  if GetKeyState("LShift", "P") {
+    ResizeWindowBorders(-25, 0, 0, 0)     ; [CapsLock]+[LShift]+[←]: Decrease left border by 25 pixels
+  } else if GetKeyState("LCtrl", "P") {
+    ResizeWindowBorders(-25, 0, 0, -25)   ; [CapsLock]+[LCtrl]+[←]: Decrease left border by 25 pixels
+  } else {
+    ResizeWindowBorders(25, 0, 0, 0)     ; [CapsLock]+[←]: Increase left border by 25 pixels
   }
   return
 }
