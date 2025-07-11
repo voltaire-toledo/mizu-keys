@@ -61,11 +61,11 @@
     LaunchCalculator()
   }
 
+  LAlt & t::
   ;╭───────────────────────────────────────────────────────╮
   ;│  [Ctrl]+[Alt]+[T] for Terminal                        │
   ;│  [Ctrl]+[Alt]+[Shift]+[T] for Terminal in Admin Mode  │
   ;╰───────────────────────────────────────────────────────╯
-  LAlt & t::
   {
     ; [Ctrl]+[Alt]+[T] to run Terminal
     If GetKeyState("LShift", "P") && GetKeyState("Alt", "P") && GetKeyState("LCtrl", "P")
@@ -77,8 +77,30 @@
 
     If GetKeyState("LCtrl", "P") && GetKeyState("LAlt", "P")
     {
+      LaunchTerminal()
+    }
+    Else
+    {
+      Send "T" ; This is to respond to [RShift}+[T]; otherwise, nothing will be sent
+    }
+  }
+
+  LAlt & w::
+  ;╭───────────────────────────────────────────────────────────╮
+  ;│  [Ctrl]+[Alt]+[T] for Warp Terminal                       │
+  ;│  [Ctrl]+[Alt]+[Shift]+[T] for Warp Terminal in Admin Mode │
+  ;╰───────────────────────────────────────────────────────────╯
+  {
+    ; [Ctrl]+[Alt]+[T] to run Terminal
+    If GetKeyState("LShift", "P") && GetKeyState("Alt", "P") && GetKeyState("LCtrl", "P")
+    {
+      LaunchWarpTerminalAsAdmin
+      ; exit ; return will only exit the current condition
+    }
+
+    If GetKeyState("LCtrl", "P") && GetKeyState("LAlt", "P")
+    {
       LaunchWarpTerminal()
-      ; LaunchTerminal()
     }
     Else
     {
@@ -101,7 +123,7 @@
     │  +-------------------------------------------------------------------------+  │
     │  | ⚡ The {Blind^} prevents misinterpretation by ignoring the Ctrl modifier │  │
     │  +-------------------------------------------------------------------------+  │
-    ╰───────────────────────────────────────────────────────────────────────────────╯*/
+  ╰───────────────────────────────────────────────────────────────────────────────╯*/
   ~RCtrl & Up:: Send "{Blind>^}{PgUp}"
   ~RCtrl & Down:: Send "{Blind>^}{PgDn}"
   ~RCtrl & Left:: Send "{Blind>^}{Home}"

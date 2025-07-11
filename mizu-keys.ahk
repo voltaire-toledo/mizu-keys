@@ -44,6 +44,13 @@ app_splashGUI.Show("w300 h90 Center")
 ; --- End Splash Screen ---
 
 /*
+╭────────────────────────────────────╮
+│ ** PERSONAL CUSTOMIZATIONS HERE ** │
+╰────────────────────────────────────╯
+*/
+#Include ".\custom\_custom_functions.mzk"
+
+/*
 ╭────────────────────────╮
 │ LIBRARY INCLUDES       │
 ╰────────────────────────╯
@@ -61,7 +68,8 @@ app_splashGUI.Show("w300 h90 Center")
 #include ".\lib\_virtual_desktops.mzk"
 ; #Include ".\lib\_time_functions.ahk"
 ; #Include ".\lib\_screen_notifications.ahk"
-#Include ".\mine\_custom_functions.mzk"
+
+
 /*
 ╭────────────────────────╮
 │ INITIALIZATION         │
@@ -98,8 +106,8 @@ EndScript(*)
 ; │       KEY HOTKEY DEFINITIONS: CORE FUNCTIONALITY            │
 ; │   Not affected by ToggleAuxHotkeys and ToggleAuxHotstrings  │
 ; ├─────────────────────────────────────────────────────────────┤
-; │  [Ctrl]+[Win]+[Alt]+[K]    Toggle Aux Hotkeys               │
-; │  [Ctrl]+[Win]+[Alt]+[S]    Toggle Aux Hotsrings             │
+; │  [Ctrl]+[Win]+[Alt]+[K]    Toggle Aux Hotkeys (DISABLED)    │
+; │  [Ctrl]+[Win]+[Alt]+[S]    Toggle Aux Hotstrings (DISABLED) │
 ; │  [Ctrl]+[Win]+[Alt]+[R]    Reload this app                  │
 ; │  [Ctrl]+[Win]+[Alt]+[E]    Edit this AHK (default editor)   │
 ; │  [Ctrl]+[Win]+[Alt]+[F2]   AutoHotKey Help File             │
@@ -108,9 +116,9 @@ EndScript(*)
 ; ╰─────────────────────────────────────────────────────────────╯
 
 ; [Ctrl]+[Alt]+[Win]+[K]: Toggle Aux Hotkeys
-^#!k:: {
-  ToggleAuxHotkeys()
-}
+; ^#!k:: {
+;   ToggleAuxHotkeys()
+; }
 
 ; [Ctrl]+[Alt]+[Win]+[S]: Toggle Aux Hotstrings
 ; ^#!s:: {

@@ -130,8 +130,8 @@ ShowAboutDialog(*) {
 
   ; Example hotkeys - replace/add as needed for your project
   lv_corehkeys.Opt("-Redraw")
-  lv_corehkeys.Add(, "Toggle Aux Keys", "[Ctrl] + [⊞] + [Alt] + [K] ", "Toggle the auxiliary keys on/off")
-  lv_corehkeys.Add(, "Toggle Aux Hotstrings", "[Ctrl] + [⊞] + [Alt] + [S] ", "Toggle the auxiliary hotstrings on/off")
+  ; lv_corehkeys.Add(, "Toggle Aux Keys", "[Ctrl] + [⊞] + [Alt] + [K] ", "Toggle the auxiliary keys on/off")
+  ; lv_corehkeys.Add(, "Toggle Aux Hotstrings", "[Ctrl] + [⊞] + [Alt] + [S] ", "Toggle the auxiliary hotstrings on/off")
   lv_corehkeys.Add(, "Reload and Restart " thisapp_name, "[Ctrl] + [⊞] + [Alt] + [R] ", "Reload and restart " thisapp_name)
   lv_corehkeys.Add(, "AutoHotkey Help", "[Ctrl] + [⊞] + [Alt] + [F2]`t", "Open the AutoHotkey help docs")
   lv_corehkeys.Add(, thisapp_name " Help", "[Ctrl] + [⊞] + [Alt] + [F1]`t", "Display this dialog")

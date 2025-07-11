@@ -103,66 +103,120 @@ ResizeWindowBorders(leftDelta := 0, bottomDelta := 0, topDelta := 0, rightDelta 
   WinMove(newX, newY, newW, newH, active_hwnd)
 }
 
+MoveActiveWindow(leftDelta := 0, topDelta := 0) {
+  ; ╭──────────────────────────────────────────────────────────────────────────────╮
+  ; │ MoveActiveWindow: Move the active window by the specified pixel amounts.     │
+  ; │   leftDelta: Pixels to move the window left (negative to move right).        │
+  ; │   topDelta: Pixels to move the window up (negative to move down).            │
+  ; ╰──────────────────────────────────────────────────────────────────────────────╯
 
-; ╭────────────────────────────────────────────────╮
-; │ Shortcuts for resizing and positioning windows │
-; ╰────────────────────────────────────────────────╯
-Capslock & /:: { ; [CapsLock]+[/]: Resize to 70% of the screen size
+  ; Exit function if the active window is "Snap Assist" or "Task View"
+  if (WinGetClass("A") = "Windows.UI.Core.CoreWindow" || WinGetClass("A") = "Shell_TrayWnd") {
+    MsgBox("Cannot move the Snap Assist or Task View window!")
+    return
+  }
+  ; Get the active window handle and its current position/size
+  winX := 0, winY := 0, winW := 0, winH := 0
+  active_hwnd := WinGetID("A")
+  if !active_hwnd {
+    MsgBox("No active window handle found!")
+    return
+  }
+  ; Get the current position and size of the active window
+  WinGetPos(&winX, &winY, &winW, &winH, active_hwnd)
+
+  if (WinGetMinMax(active_hwnd) = 1) { ; 1 = Maximized
+    WinRestore(active_hwnd) ; WinrRestore tends to keep the window animation smooth
+  } else if (WinGetMinMax(active_hwnd) = -1) { ; -1 = Minimized
+    return ; Do not move minimized windows
+  }
+
+  ; Calculate new position and size
+  newX := winX + leftDelta
+  newY := winY + topDelta
+
+  WinMove(newX, newY, , , active_hwnd)
+}
+
+; ╭─────────────────────────────────────────────────────────────────────────────────────────╮
+; │ Shortcuts for resizing window using the CapsLock[⇪] modifier:                           │
+; │ ✓                [⇪]+[/]: Resize to 70% of the screen size                              │
+; │ ✓ [⇪]+[Lt Square Brackt]: Decrease size by 5% of the screen size                        │
+; │ ✓ [⇪]+[Rt Square Brackt]: Increase size by 5% of the screen size                        │
+; │ ✓          [⇪]+[← ↑ ↓ →]: Move the active window                                        │
+; │ ✓  [⇪]+[LCtrl]+[← ↑ ↓ →]: Expand(↑,→) or shrink(↓,←) window vertically or horizontally  │
+; │ ×       [⇪]+[LShift]+[↑]: Expand window to the TOP EDGE of the screen                   │
+; │ ×       [⇪]+[LShift]+[↓]: Expand window to the BOTTOM EDGE dimensions of the screen     │
+; │ ×       [⇪]+[LShift]+[←]: Expand window to the LEFT EDGE dimension of the screen        │
+; │ ×       [⇪]+[LShift]+[→]: Expand window to the RIGHT EDGE of the screen                 │
+; │ ×    [⇪]+[LAlt]+[← ↑ ↓ ]: Shrink window by moving border inwards in the key direction   │
+; │ ×      [⇪]+[⊞]+[← ↑ ↓ ]: Shrink window by moving border inwards in the key direction   │
+; ╰─────────────────────────────────────────────────────────────────────────────────────────╯
+Capslock & /:: { ; [⇪]+[/]: Resize to 70% of the screen size
   SqueezeAndPose(70)
   return
 }
-CapsLock & [:: { ; [CapsLock]+[Left Square Bracket]: Decrease size by 5% of the screen size
+CapsLock & [:: { ; [⇪]+[Left Square Bracket]: Decrease size by 5% of the screen size
   SqueezeAndPose(0, -5)
   return
 }
-CapsLock & ]:: { ; [CapsLock]+[Right Square Bracket]: Increase size by 5% of the screen size
+CapsLock & ]:: { ; [⇪]+[Right Square Bracket]: Increase size by 5% of the screen size
   SqueezeAndPose(0, 5)
   return
 }
-
-; ╭───────────────────────────────────────────────────────────────────────────────────────────────────╮
-; │ Shortcuts for resizing window dimensions by 25 pixels:                                            │
-; │ - [CapsLock]+[LShift]+[← ↑ ↓ →]: Decrease window dimensions by moving border in the key direction │
-; │ - [CapsLock]+[LCtrl]+[← ↑ ↓ →]: Resize window vertically or horizontally                          │
-; │ - [CapsLock]+[← ↑ ↓ →]: Increase window dimensions by moving border in the key direction          │
-; ╰───────────────────────────────────────────────────────────────────────────────────────────────────╯
 CapsLock & Up:: {
-  if GetKeyState("LShift", "P") {
-    ResizeWindowBorders(0, 0, -25, 0)   ; [CapsLock]+[LShift]+[↑]: Decrease top border by 25 pixels
-  } else if GetKeyState("LCtrl", "P") {
-    ResizeWindowBorders(0, 25, 25, 0)   ; [CapsLock]+[LCtrl]+[↑]: Increase top and bottom border by 25 pixels
+  if GetKeyState("LCtrl", "P") {
+    ResizeWindowBorders(0, 25, 25, 0)     ; [⇪]+[LCtrl]+[↑]: Expand the window vertically (50px)
+  } else if GetKeyState("LShift", "P") {
+    return                                ;   ResizeWindowBorders(0, 0, 25, 0)      ; [⇪]+[LShift]+[↑]: ???
+  } else if GetKeyState("LWin", "P") {
+    return                                ;   ResizeWindowBorders(0, 0, 0, 25)     ; [⇪]+[⊞]+[→]: ???
+  } else if GetKeyState("LAlt", "P") {
+    ResizeWindowBorders(0, -25, 0, 0)   ; [⇪]+[LAlt]+[↑]: Shrink & move bottom border upwards (25 pixels)
   } else {
-    ResizeWindowBorders(0, 0, 25, 0)    ; [CapsLock]+[↑]: Increase top border by 25 pixels
-  }
-  return
-}
-CapsLock & Down:: {
-  if GetKeyState("LShift", "P") {
-    ResizeWindowBorders(0, -25, 0, 0)     ; [CapsLock]+[LShift]+[↓]: Decrease bottom border by 25 pixels
-  } else if GetKeyState("LCtrl", "P") {
-    ResizeWindowBorders(0, -25, -25, 0)   ; [CapsLock]+[LCtrl]+[↓]: Decrease top and bottom border by 25 pixels
-  } else {
-    ResizeWindowBorders(0, 25, 0, 0)      ; [CapsLock]+[↓]: Increase bottom border by 25 pixels
+    MoveActiveWindow(0, -50)              ; [⇪]+[↑]: Move the window up by 50 pixels
   }
   return
 }
 CapsLock & Right:: {
-  if GetKeyState("LShift", "P") {
-    ResizeWindowBorders(0, 0, 0, -25)     ; [CapsLock]+[LShift]+[→]: Decrease right border by 25 pixels
-  } else if GetKeyState("LCtrl", "P") {
-    ResizeWindowBorders(25, 0, 0, 25)     ; [CapsLock]+[LCtrl]+[→]: Increase left and right border by 25 pixels
+  if GetKeyState("LCtrl", "P") {
+    ResizeWindowBorders(25, 0, 0, 25)     ; [⇪]+[LCtrl]+[→]: Expand the window horizontally (50px)
+  } else if GetKeyState("LShift", "P") {
+    return                                ;   ResizeWindowBorders(0, 0, 0, 25)     ; [⇪]+[LShift]+[→]: ???
+  } else if GetKeyState("LWin", "P") {
+    return                                ;   ResizeWindowBorders(0, 0, 0, 25)     ; [⇪]+[⊞]+[→]: ???
+  } else if GetKeyState("LAlt", "P") {
+    ResizeWindowBorders(-25, 0, 0, 0)  ; [⇪]+[LAlt]+[→]: Shrink & move left border inwards (25 pixels)
   } else {
-    ResizeWindowBorders(0, 0, 0, 25)      ; [CapsLock]+[→]: Increase right border by 25 pixels
+    MoveActiveWindow(50, 0)            ; [⇪]+[→]: Move the window right by 50px
   }
   return
 }
-CapsLock & Left:: { 
-  if GetKeyState("LShift", "P") {
-    ResizeWindowBorders(-25, 0, 0, 0)     ; [CapsLock]+[LShift]+[←]: Decrease left border by 25 pixels
-  } else if GetKeyState("LCtrl", "P") {
-    ResizeWindowBorders(-25, 0, 0, -25)   ; [CapsLock]+[LCtrl]+[←]: Decrease left border by 25 pixels
+CapsLock & Down:: {
+  if GetKeyState("LCtrl", "P") {
+    ResizeWindowBorders(0, -25, -25, 0)   ; [⇪]+[LCtrl]+[↓]: Shrink the window vertically (50px)
+  } else if GetKeyState("LShift", "P") {
+    return                                ;   ResizeWindowBorders(0, 0, -25, 0)     ; [⇪]+[LShift]+[↓]: ???
+  } else if GetKeyState("LWin", "P") {
+    return                                ;   ResizeWindowBorders(0, 0, 0, 25)     ; [⇪]+[⊞]+[→]: ???
+  } else if GetKeyState("LAlt", "P") {
+    ResizeWindowBorders(0, 0, -25, 0)    ; [⇪]+[LAlt]+[↓]: Shrink & move top border inwards (25 pixels)
   } else {
-    ResizeWindowBorders(25, 0, 0, 0)     ; [CapsLock]+[←]: Increase left border by 25 pixels
+    MoveActiveWindow(0, 50)               ; [⇪]+[↓]: Move the window down by 50 pixels
+  }
+  return
+}
+CapsLock & Left:: {
+  if GetKeyState("LCtrl", "P") {
+    ResizeWindowBorders(-25, 0, 0, -25)     ; [⇪]+[LCtrl]+[←]: Shrink the window horizontally (50px)
+  } else if GetKeyState("LShift", "P") {
+    return                                  ;ResizeWindowBorders(0, 0, -25, 0) ; [⇪]+[LShift]+[↓]: ???
+  } else if GetKeyState("LWin", "P") {
+    return                                ;   ResizeWindowBorders(0, 0, 0, 25)     ; [⇪]+[⊞]+[→]: ???
+  } else if GetKeyState("LAlt", "P") {
+    ResizeWindowBorders(0, 0, 0, -25)   ; [⇪]+[LAlt]+[←]: Shrink & move right border inwards by 25 pixels
+  } else {
+    MoveActiveWindow(-50, 0)     ; [⇪]+[←]: Move the window left by 50 pixels
   }
   return
 }

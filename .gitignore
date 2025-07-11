@@ -8,6 +8,7 @@
 # Ignore custom directory icon
 desktop.ini
 
-# Ignore the Mizu Keys custom functions
-# This file is not meant to be shared, as it contains personal customizations.
-**/mine/
+# Ignore the Mizu Keys custom functions for release
+# Only a generalized version should be included in the release
+# **/custom/mizu_keys_custom_functions.ahk
+
