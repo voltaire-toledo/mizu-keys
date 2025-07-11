@@ -10,5 +10,5 @@ desktop.ini
 
 # Ignore the Mizu Keys custom functions for release
 # Only a generalized version should be included in the release
-# **/custom/mizu_keys_custom_functions.ahk
+**/custom/mizu_keys_custom_functions.ahk
 
