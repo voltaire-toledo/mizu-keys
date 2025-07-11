@@ -24,7 +24,7 @@
 ; #HotIf (WinActive("ahk_exe WindowsTerminal.exe") or WinActive("ahk_exe code.exe") or WinActive("ahk_exe notepad.exe")) and (Aux_HotStringSupport = true)
 #HotIf (Aux_HotStringSupport = true)
 {
-  #HotString SE K10
+  #HotString SE K40
   /*
   :*:##tbl-thin##::
   :*:##tbl##::{
@@ -100,6 +100,51 @@
     Send "{Blind}{Shift up}"
   }
 
+  ; ROUND-CORNERED BOX
+  :*:##rbox##:: {
+    Sleep 100
+    Send "╭──╮{ENTER}"
+    Send "│  │{ENTER}"
+    Send "╰──╯{ENTER}"
+    Send "{Blind}{Shift up}"
+  }
+  
+  ; ROUND-CORNERED BOX - INSERT/SPLIT ROW
+    :*:##rbox-insert-row##:: 
+    :*:##rbox-split-row##:: {
+    Sleep 100
+    ; Get the previous line's text
+    ClipSaved := ClipboardAll
+
+    Send "{Up}{Home}+{End}"
+    Send "^c"
+
+    if !ClipWait(2) {
+      MsgBox "Unable to read the line above the cursor"
+      return
+    }
+    prevLine := A_Clipboard
+
+    ; Determine the length between the left and right edge characters
+    ; Find the first and last non-space character
+    leftEdge := ""
+    rightEdge := ""
+    rowLen := 0
+    if (StrLen(prevLine) >= 2) {
+      leftEdge := SubStr(prevLine, 1, 1)
+      rightEdge := SubStr(prevLine, -0, 1)
+      rowLen := StrLen(prevLine)
+    }
+
+    ; Build the split row
+    ; Use "├" + (rowLen-2) times "-" + "┤"
+    Send "{Down}{Home}"
+    splitRow := "├" . StrRepeat("-", rowLen-2) . "┤{ENTER}"
+
+    Send splitRow
+    Send "{Blind}{Shift up}"
+  }
+  ; ROUND-CORNERED table
   :*:##rtbl##::
   :*:##rtable##::
   {
@@ -111,6 +156,8 @@
     Send "╰──┴──╯{ENTER}"
     Send "{Blind}{Shift up}"
   }
+
+
 
   ; SIMPLE BOXES
   :*:##box##:: {
@@ -155,14 +202,7 @@
     Send "{Blind}{Shift up}"
   }
 
-  ; ROUNDED BOX
-  :*:##rbox##:: {
-    Sleep 100
-    Send "╭──╮{ENTER}"
-    Send "│  │{ENTER}"
-    Send "╰──╯{ENTER}"
-    Send "{Blind}{Shift up}"
-  }
+
 
   ; Fancy boxes with THIN vertical lines and THICK horizontal lines
   :*:##box-hthick##::
@@ -270,9 +310,18 @@
   
   ::`!tricolon::⁝       ; 8234
   ::`!fahrenheit::℉   ; 8457
+  ::`!windows::⊞         ; 8992 Used for Windows key or Windows logo
+  ::`!checkansi::✓       ; 10003
+  ::`!capslock::⇪        ; 10548 Used for Caps Lock key
+  ::`!backspace::⌫       ; 9003 Used for Backspace key
+  ::`!enter::↵           ; 9167 Used for Enter key
+  ::`!escape::⎋         ; 9001 Used for Escape key
+  ::`!tab::⇥             ; 9194 Used for Tab key
+  ::`!space::␣          ; 8199 Used for Space key
+  ::`!delete::⌦         ; 9004 Used for Delete key
+  ::`!insert::⎀         ; 9005 Used for Insert key
   
-
-  ; Misspellings
+  ; Common Misspellings
 
   ; Custom Strings
   ::`!magicip::168.63.129.16
@@ -287,4 +336,12 @@
 
 /*
 */
+
+; Helper function to repeat a string n times
+StrRepeat(str, count) {
+    result := ""
+    Loop count
+        result .= str
+    return result
+}
 
