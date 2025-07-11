@@ -1,0 +1,12 @@
+#Requires AutoHotkey v2.0
+
+::`!sig::Best regards,`n`nVoltaire Toledo`n💬 {Raw}+1-248-237-3251`n🌐 voltaire.toledo@proventuras.com
+
+
+LaunchWarpTerminal(*) {
+  Run("C:\Users\Jigs\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Warp.lnk")
+}
+
+LaunchWarpTerminalAsAdmin(*) {
+  Run("C:\Users\Jigs\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Warp.lnk", "", "RunAs")
+}
